@@ -9,6 +9,12 @@ def getDstName():
 	dst=dstDir + srcBody + timeStamp + ".7z"
 	return dst
 
+def checkSrc(path):
+	if os.path.exists(path) == False:
+		return False
+	
+	if os.path.isfile(path):
+		return True
 
 def main():
 	dst=getDstName()
