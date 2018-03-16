@@ -450,6 +450,7 @@ qp 杂质
 qq 册
 qr 服务
 qs 脉
+qt 脏
 qu 脱
 qv 风波
 qw 胜过
@@ -622,7 +623,7 @@ x 对
 xa 马
 xb 层
 xc 敢
-xd 門
+xd 寻
 xe 展
 xf 既要
 xg 颇
