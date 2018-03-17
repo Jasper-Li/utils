@@ -3,7 +3,6 @@ import pdb
 import random
 def data2list(data):
     data=data.split()
-    data=list(data[0])
     return data
 def printOut(l):
     lineLen=10
@@ -20,6 +19,7 @@ def main():
     #pdb.set_trace()
     l=data2list(data)
     lRand=random.sample(l, len(l))
+    print("Random data:")
     printOut(lRand)
 if __name__ == '__main__':
     main()
