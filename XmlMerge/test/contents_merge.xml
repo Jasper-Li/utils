@@ -1,0 +1,18 @@
+<contents>
+  <workflow>
+    <step filter="non_hlos" action="exe">
+        <to>Tove</to>
+        <from>Jani</from>
+        <heading>Reminder</heading>
+        <body>Don't forget me this weekend! I love you.</body>
+        <date>20190501</date>
+    </step>
+    <step filter="non_hlos" action="exe">
+        <to>Jani</to>
+        <from>Tove</from>
+        <heading>Re: Reminder</heading>
+        <body>I will not</body>
+        <date>20190501</date>
+    </step>
+  </workflow>
+</contents>
