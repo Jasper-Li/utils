@@ -151,10 +151,14 @@ def oem_merge_workflow_part(root, elements):
             print_xml_element(e)
             raise RuntimeError('WRONG workflow oem merged element')
 
-        for sub_base in base_element:
+        len_old = len(list(base_element))
+        for sub_base in list(base_element):
             base_element.remove(sub_base)
 
         base_element.extend(list(e))
+        len_new= len(list(base_element))
+        if len_old != len_new:
+            raise RuntimeError('merge failed')
     return root
 
 def main():
