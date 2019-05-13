@@ -4,7 +4,7 @@
         <to>Tove</to>
         <from>Jani</from>
         <heading>Reminder</heading>
-        <body>Don't forget me this weekend!</body>
+        <body>Don't forget me this &quot;weekend&quot;! I love you</body>
         <date>20190501</date>
     </step>
     <step filter="non_hlos" action="exe">
