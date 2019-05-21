@@ -1,0 +1,9 @@
+== Usage
+Convert asciidoc file to Docx.
+
+== Dependency
+asciidoctor and pandoc.
+
+== What does it do?
+
+asciidoctor -b docbook - INFILE.adoc | pandoc -f docbook -t docx -o INFILE.docx

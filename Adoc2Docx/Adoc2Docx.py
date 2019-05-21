@@ -34,7 +34,7 @@ def Adoc2Docx(adoc_file):
     cmd = 'asciidoctor -b ' + tmp_format + ' -o ' + tmp_name + ' ' + adoc_file
     check_call(cmd, shell = True)
 
-    docx_name = body_name + '_' + tmp_format + '.docx'
+    docx_name = body_name + '.docx'
     cmd = 'pandoc -f ' + tmp_format + ' -t docx -o ' + docx_name + ' ' + tmp_name
     check_call(cmd, shell = True)
 
