@@ -37,6 +37,10 @@ def print_csv(reader):
             break
 
 def get_cdf_from_file(csv_file):
+    '''
+    Returns:
+        cdf: a float number
+    '''
     data = load_csv(csv_file)
     cdf = get_cdf_from_data(data)
     return cdf
@@ -52,9 +56,9 @@ def get_cdf_from_data(data):
 
     cdf = norm.cdf(data[0], mean, stand_var)
 
-    print('mean:{}, variance:{}, stand_var:{}, cdf:{}'.format(
-        mean, variance, stand_var, cdf
-    ))
+    #print('mean:{}, variance:{}, stand_var:{}, cdf:{}'.format(
+    #    mean, variance, stand_var, cdf
+    #))
     return cdf
     
 def load_csv(csv_file):
@@ -91,18 +95,43 @@ def load_csv(csv_file):
         return data 
         #set_trace()
 
-def get_cdf(msg):
-    csv = input(msg)
+def get_cdf_from_path(csv):
+    '''
+    Args:
+        csv: a string of file path to csv file.
+    Returns:
+        cdf: a float number, cdf of the csv file.
+        or msg: a string.
+    '''
     if not os.path.isfile(csv):
-        print("Not find file: ", csv)
-        sys.exit(1)
+        msg = "Not find file: " + csv
+        print(msg)
+        return msg
     cdf = get_cdf_from_file(csv)
     return cdf
 
+def get_CtTemp(pb_csv, pe_csv):
+    '''
+    Args:
+        pb_csv, pe_csv: file path to csv file
+    Returns:
+        ct_temp: a float number. Chang Tou Temperature.
+    '''
+    pb_cdf = get_cdf_from_path(pb_csv)
+    if isinstance(pb_cdf, str):
+        return pb_cdf
+    pe_cdf = get_cdf_from_path(pe_csv)
+    if isinstance(pe_cdf, str):
+        return pe_cdf
+    ct_temp = (pb_cdf + pe_cdf)/2
+    #print('\nResult:\nfile: {} {} \nct_temp: {}\n'.format(pb_csv, pe_csv, ct_temp))
+    print('{},{},{}'.format(pb_csv, pe_csv, ct_temp))
+    return ct_temp
+
 def main():
-    pb_cdf = get_cdf('Input pb file: ')
-    pe_cdf = get_cdf('Input pe file: ')
-    CtTemp = (pb_cdf + pe_cdf)/2
+    pb_cdf = input('Input pb file: ')
+    pe_cdf = input('Input pe file: ')
+    CtTemp = get_CtTemp(pb_cdf, pe_cdf)
     print('CtTemp: ', CtTemp)
 
     return 0
