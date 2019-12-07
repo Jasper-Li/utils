@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-
+'''
+Depends:
+    Pillow:    pip install Pillow
+    scipy: pip install scipy
+'''
 # import standard lib
 import os.path
 import sys
