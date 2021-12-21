@@ -2,7 +2,7 @@
 
 # import standard lib
 import sys
-#from pdb import set_trace
+from pdb import set_trace
 from unittest import main, TestCase
 
 # import custom lib

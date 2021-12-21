@@ -1,0 +1,6 @@
+= Read Me
+:hardbreaks-option:
+
+== Precondition
+1. install APSO plugin in libreoffice.
+shortcut: shift + alt + f11

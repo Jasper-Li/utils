@@ -1,4 +1,6 @@
 *.swp
+*.un~
 __pycache__
 *.exe
 *.o
+logs
