@@ -1,6 +1,26 @@
 = Read Me
+//:kroki-fetch-diagram: 
+:imagesdir: .media
 :hardbreaks-option:
 
 == Precondition
 1. install APSO plugin in libreoffice.
 shortcut: shift + alt + f11
+
+[mermaid]
+----
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+----
+
+[mermaid]
+....
+pie title Pets adopted by volunteers
+    "Dogs" : 386
+    "Cats" : 85
+    "Rats" : 15
+
+....
