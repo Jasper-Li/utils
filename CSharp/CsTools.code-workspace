@@ -5,6 +5,21 @@
 		},
 		{
 			"path": "TestTextCleaner"
+		},
+		{
+			"path": "Docs"
+		},
+		{
+			"path": "Asciidoc2Markdown"
+		},
+		{
+			"path": "Asciidoc2MarkdownTest"
+		},
+		{
+			"path": "LxhBase"
+		},
+		{
+			"path": "LxhBaseMSTest"
 		}
 	]
 }

@@ -1,0 +1,15 @@
+:hardbreaks-option:
+
+== 需求
+Name: Asciidoc2Markdown, Ad2Md
+Function: Convert Asciidoc file to Github Flavoured Markdown style file.
+Usage: 
+
+> Ad2Md in.ascii -o out.md
+
+Requirements installed: 
+
+* asciidoctor
+* pandoc
+
+== 设计
