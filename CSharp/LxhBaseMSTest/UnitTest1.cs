@@ -15,6 +15,7 @@ public class UnitTest1
             new("pandoc", "--version", 0),
             new("asciidoctor.bat", "--version", 0),
             new("asciidoctor.bat", "-V", 0),
+            new("asciidoctor", "-V", 0),
         };
         string? output = null;
         int result;
