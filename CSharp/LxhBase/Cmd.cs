@@ -1,13 +1,10 @@
 ﻿using System.Diagnostics;
 
 namespace LxhBase;
-public class Cmd
-{
-    public static int Run(string exe, string? args)
-    {
+public class Cmd {
+    public static (int status, string output) Run(string exe, string? args) {
         Debug.WriteLine($"Cmd: {exe} {args}");
-        ProcessStartInfo startInfo = new()
-        {
+        ProcessStartInfo startInfo = new() {
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             UseShellExecute = false,
@@ -16,35 +13,31 @@ public class Cmd
             Arguments = $"/c {exe} {args}",
         };
 
-        if (startInfo == null)
-        {
+        if (startInfo == null) {
             throw new Exception("Failed to create ProcessStartInfo");
         }
-        PrintVerbs(startInfo);
-        string? output = null;
+        // PrintVerbs(startInfo);
         using Process? p = Process.Start(startInfo);
-        if (p == null)
-        {
+        if (p == null) {
             throw new Exception($"Failed to execute {exe} {args}");
         }
-        output = p.StandardOutput.ReadToEnd();
         p.WaitForExit();
-        Debug.Write($"cmd finished. status: {p.ExitCode}. ");
-        if (p.ExitCode == 0){
-         Debug.WriteLine($"output: {output}");
-        }
-        else {
+        if (p.ExitCode != 0) {
             string error = p.StandardError.ReadToEnd();
-            Debug.WriteLine($"error: {error}");
+            string msg = $"Failed to run cmd: '{startInfo.FileName} {startInfo.Arguments}'. status: {p.ExitCode}. error msg: {error}";
+            Debug.WriteLine(msg);
+            throw new Exception(msg);
         }
-        return p.ExitCode;
+        string output = p.StandardOutput.ReadToEnd();
+        return (p.ExitCode, output);
     }
+    /*
     private static void PrintVerbs(ProcessStartInfo startInfo) {
         Debug.WriteLine($"{startInfo.FileName} verb: {startInfo.Verb}, Verbs count: {startInfo.Verbs.Length}");
         int i = 0;
         foreach (var verb in startInfo.Verbs) {
             Debug.WriteLine($"{i++}: {verb}");
         }
-
     }
+    */
 }

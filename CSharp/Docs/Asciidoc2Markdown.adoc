@@ -5,7 +5,7 @@ Name: Asciidoc2Markdown, Ad2Md
 Function: Convert Asciidoc file to Github Flavoured Markdown style file.
 Usage: 
 
-> Ad2Md in.ascii -o out.md
+> Ad2Md in.adoc -o out.md
 
 Requirements installed: 
 
@@ -13,3 +13,9 @@ Requirements installed:
 * pandoc
 
 == 设计
+
+----
+asciidoctor -b docbook5 in.adoc -o _tmp.xml
+pandoc -f docbook -t GFM _tmp.xml -o in.md
+rm _tmp.xml
+----

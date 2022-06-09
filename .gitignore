@@ -1,5 +1,11 @@
 **/.vscode/*
 **/build
+**/.media/*
+**/_media/*
+_images
+.images
+**/bin/*
+**/obj/*
 *.swp
 *.un~
 __pycache__
@@ -7,5 +13,4 @@ __pycache__
 *.o
 logs
 .~lock.*
-.media
 .asciidoctor
