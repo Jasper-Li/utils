@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-
+using namespace std;
 #if 1
 int main()
 {
@@ -13,7 +13,14 @@ int main()
 
     auto p = malloc(10);
     auto p1 = NEW int[15];
-    std::cout << "Hello World!\n";
+    struct S{
+        int* pn{};
+    };
+    S s;
+    int* pn1{};
+    
+    cout << "pn " << hex << s.pn << " "
+        << "pn1 " << hex << pn1 << endl;
 }
 #else
 int add(int a, int b) { return a + b; }
