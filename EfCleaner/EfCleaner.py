@@ -24,7 +24,7 @@ def convert(input):
         buf = ''
         line_num = 0
         for line in f:
-            print(f'line: "{line}"')
+            #print(f'line: "{line}"')
             line_num += 1
             # set_trace()
             if is_empty(line):
@@ -38,19 +38,28 @@ def convert(input):
             elif 'EffortlessEnglishClub.com' in line:
                 print(f'line {line_num} has key')
                 continue
-            elif line.endswith(' \n'):
+            else:
+                line = line.strip()
                 start = True
-                buf += line[:-1]
+                if line.endswith('-'):
+                    buf += line
+                else:
+                    buf += line + ' '
+    if len(buf) != 0:
+       content.append(buf) 
     if len(content) == 0:
         raise RuntimeError("content is empty")
-    outpath = get_path_outfile(input)           
+    return tuple(content)
+
+def save(input_file, content):
+    outpath = get_path_outfile(input_file)           
     with open(outpath, "wt", errors='replace', encoding='utf-8') as f:
         for line in content:
             f.write(line)
     print(f'write to {outpath}')                
 
-def get_path_outfile(input):
-    inbase, ext = op.splitext(input)
+def get_path_outfile(path):
+    inbase, ext = op.splitext(path)
     outbase = inbase + "_out"
     i = 0
     out = f'{outbase}_{i}{ext}'
@@ -70,7 +79,9 @@ def main():
     parser.add_argument('input')
     args = parser.parse_args()
 
-    convert(args.input)
+    input_file = args.input
+    content = convert(input_file)
+    save(input_file, content)
     return 0
 
 if __name__ == '__main__':
