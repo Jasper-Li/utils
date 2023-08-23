@@ -5,6 +5,8 @@ import <algorithm>;
 import <ranges>;
 import <string>;
 import <iostream>;
+import <map>;
+import <utility>;
 //import <string>;
 import BqfsConverterLib;
 import bqfs_cmd_type;
@@ -35,12 +37,44 @@ TEST(Converter, parseCommentLine) {
     }
 }
 TEST(Converter, parseWriteLine) {
+    //GTEST_SKIP() << "dev...";
     const auto w1 = bc::parse_line("W: AA 00 01 00");
     const bqfs_cmd_t w1_expect{CMD_W, 0xAA, 0x00, 
         {.bytes{0x01, 0x00}},
         2,
     };
-    ASSERT_EQ(w1_expect, w1);
+    ASSERT_TRUE(w1);
+    const auto value = w1.value();
+    cout << value.to_string() << endl
+        << w1_expect.to_string() << endl;
+    ASSERT_EQ(w1_expect, w1.value());
+}
+TEST(Converter, guessType) {
+    const pair<char, optional<cmd_type_t>> checks[]{
+        {'R', {CMD_R}},
+        {'W', {CMD_W}},
+        {'C', {CMD_C}},
+        {'X', {CMD_X}},
+        {'A', {}},
+        {'r', {}},
+    };
+    for (const auto [ch, type_expect] : checks) {
+        const auto result = bc::guess_type(ch);
+        ASSERT_EQ(type_expect, result);
+    }
+}
+TEST(Converter, str2uint_8) {
+    const pair<string_view, optional<uint8_t>> checks[]{
+        {"00", {0x00}},
+        {"01", {0x01}},
+        {"0a", {0x0a}},
+        {"0A", {0x0A}},
+    };
+    for (const auto [s, value] : checks) {
+        const auto result = bc::str2uint8_t(s);
+        ASSERT_EQ(value, result) 
+            << format("Failed to convert \"{}\", {} != {}", s, value.value(), result.value());
+    }
 }
 TEST(print_string, array_span) {
     uint8_t bytes[10]{ 0x01, 0x02, 0x03 };
@@ -81,6 +115,23 @@ TEST(print_string, cmd_type_t_to_string) {
     ASSERT_EQ("CMD_C", cmd_type_t_to_string(CMD_C));
     ASSERT_EQ("CMD_X", cmd_type_t_to_string(CMD_X));
 
+}
+TEST(bqfs_cmd_t, cmp) {
+    const bqfs_cmd_t a{
+        .cmd_type = CMD_W,
+        .addr = 0XAA,
+        .reg = 0X0,
+        .data = {.bytes = {0x00, 0x00}},
+        .data_len = 2,
+    };
+    const bqfs_cmd_t b{
+        .cmd_type = CMD_W,
+            .addr = 0XAA,
+            .reg = 0X0,
+            .data = {.bytes = {0x01, 0x00} },
+            .data_len = 2,
+    };
+    ASSERT_NE(a, b);
 }
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
