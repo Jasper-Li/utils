@@ -18,12 +18,8 @@ bool bqfs_cmd_t::operator==(bqfs_cmd_t const& o) const {
     }
     else if(cmd_type == CMD_X) { return data.delay == o.data.delay; }
     else {
-		for (uint8_t i{}; i < data_len; ++i) {
-			if (data.bytes[i] != o.data.bytes[i]) {
-				return false;
-			}
-		}
-		return true;
+		return ranges::equal(std::cbegin(data.bytes), std::cbegin(data.bytes) + data_len,
+			std::cbegin(o.data.bytes), std::cbegin(o.data.bytes) + data_len);
     }
 }
 std::string bqfs_cmd_t::bytes_to_string(const std::span<const uint8_t>bytes) {

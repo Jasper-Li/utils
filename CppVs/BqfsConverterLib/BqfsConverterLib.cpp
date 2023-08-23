@@ -99,9 +99,8 @@ optional<bqfs_cmd_t> bc::parse_line(const string_view line) {
 					.data{.bytes = {}},
 					.data_len = static_cast<uint8_t>(size - 2),
 				};
-				for (uint8_t i{ 0 }; i < result.data_len; ++i) {
-					result.data.bytes[i] = values.at(i+2);
-				}
+				std::ranges::copy(values.cbegin() + 2, values.cend(),
+					std::begin(result.data.bytes));
 				return result;
 			}
 			catch (std::exception const& e) {
