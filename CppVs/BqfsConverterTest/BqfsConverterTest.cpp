@@ -36,18 +36,42 @@ TEST(Converter, parseCommentLine) {
         ASSERT_FALSE(result);
     }
 }
-TEST(Converter, parseWriteLine) {
+TEST(Converter, parseValidLines) {
     //GTEST_SKIP() << "dev...";
+    const pair<string_view, bqfs_cmd_t> checks[]{
+        {"W: AA 00 01 00", 
+			{CMD_W, 0xAA, 0x00, 
+				{.bytes{0x01, 0x00}},
+				2,
+            },
+        },
+        {"C: AA 00 21 06", 
+			{CMD_C, 0xAA, 0x00, 
+				{.bytes{0x21, 0x06}},
+				2,
+            },
+        },
+        {"C: AA 60 A5",
+			{CMD_C, 0xAA, 0x60, 
+				{.bytes{0xa5}},
+				1,
+            },
+        },
+    };
+    for (const auto& [line, expect] : checks) {
+        const auto result = bc::parse_line(line);
+        ASSERT_TRUE(result) << format("Failed to check line: {}", line);
+        ASSERT_EQ(expect, result.value());
+    }
+#if 0
     const auto w1 = bc::parse_line("W: AA 00 01 00");
     const bqfs_cmd_t w1_expect{CMD_W, 0xAA, 0x00, 
         {.bytes{0x01, 0x00}},
         2,
     };
     ASSERT_TRUE(w1);
-    const auto value = w1.value();
-    cout << value.to_string() << endl
-        << w1_expect.to_string() << endl;
     ASSERT_EQ(w1_expect, w1.value());
+#endif
 }
 TEST(Converter, guessType) {
     const pair<char, optional<cmd_type_t>> checks[]{
@@ -72,6 +96,22 @@ TEST(Converter, str2uint_8) {
     };
     for (const auto [s, value] : checks) {
         const auto result = bc::str2uint8_t(s);
+        ASSERT_EQ(value, result) 
+            << format("Failed to convert \"{}\", {} != {}", s, value.value(), result.value());
+    }
+}
+
+TEST(Converter, str2uint16_t) {
+    const pair<string_view, optional<uint16_t>> checks[]{
+        {"00", {00}},
+        {"1000", {1000}},
+        {"10", {10}},
+    };
+    for (const auto [s, value] : checks) {
+        const auto result = bc::str2uint16_t(s);
+        if (value) {
+            ASSERT_TRUE(result) << format("Failed to convert uint16_t: \"{}\"", s);;
+        }
         ASSERT_EQ(value, result) 
             << format("Failed to convert \"{}\", {} != {}", s, value.value(), result.value());
     }

@@ -56,7 +56,17 @@ optional<uint8_t> bc::str2uint8_t(const string_view s) {
 		result.ec == std::errc::result_out_of_range) {
 		return {};
 	}
-//	cout << format("debug: \"{}\" -> {:#x}\n", s, value);
+	return { value };
+}
+optional<uint16_t> bc::str2uint16_t(const string_view s) {
+	uint16_t value;
+	const auto p = s.data();
+	const auto result = std::from_chars(p, p + s.size(), value, 10);
+	if (result.ec == std::errc::invalid_argument ||
+		result.ec == std::errc::result_out_of_range) {
+		cout << format("Failed to convert string to uint16_t: \"{}\"", s);
+		return {};
+	}
 	return { value };
 }
 
@@ -77,7 +87,7 @@ optional<bqfs_cmd_t> bc::parse_line(const string_view line) {
 		if (type != CMD_X) {
 			vector<string_view> bufs{ elements.cbegin(), elements.cend() };
 			const size_t size = bufs.size();
-			if (size <= 3) { 
+			if (size < 3) { 
 				cout << format(R"(elements size({}) <= 3 for line "{}")",
 					size, line);
 				return {}; 
