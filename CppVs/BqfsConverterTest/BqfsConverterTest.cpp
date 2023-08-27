@@ -6,11 +6,16 @@ import <ranges>;
 import <string>;
 import <iostream>;
 import <map>;
+import <fstream>;
 import <utility>;
+import <set>;
+import <filesystem>;
+import <cstdlib>;
 //import <string>;
 import BqfsConverterLib;
 import bqfs_cmd_type;
 
+namespace fs = std::filesystem;
 using namespace std;
 using bc = BqfsConverterLib;
 #if 0
@@ -21,10 +26,43 @@ void PrintTo(const bqfs_cmd_t& point, std::ostream* os) {
 }
 }
 #endif
-TEST(Converter, init) {
-    GTEST_SKIP() << "Skipping single test";
-    auto path{ "test/input1.fs" };
-    BqfsConverterLib bq{ path };
+TEST(Converter, checkFile) {
+    GTEST_SKIP() << "only for test file";
+    const auto path{ "test/input1.fs" };
+    ifstream ifs{ path };
+    if (!ifs) {
+        cout << format("Failed to open file: {} at {}\n", path, __LINE__);
+    }
+    std::set<char> first_chars;
+    size_t size{};
+    for (string line; getline(ifs, line);) {
+        if (line.starts_with(';')) continue;
+        ++size;
+        first_chars.insert(line.at(0));
+    }
+    for (const auto v : first_chars) {
+        cout << v << " ";
+    }
+    cout << endl;
+    cout << format("size: {}\n", size); // 171
+}
+TEST(Converter, basic) {
+    // GTEST_SKIP() << "Skipping single test";
+    const auto path{ "test/input1.fs" };
+    const BqfsConverterLib bq{ path };
+    constexpr size_t cmd_size{ 171 };
+    ASSERT_EQ(cmd_size, bq.size());
+    const auto out_path{ "test/input1.h" };
+    if (fs::is_regular_file(out_path)) {
+        ASSERT_TRUE(fs::remove(out_path));
+    }
+    bq.write_to(out_path);
+    ASSERT_TRUE(fs::is_regular_file(out_path));
+	ASSERT_TRUE(fs::remove(out_path));
+
+    const auto cmd = format("BqfsConverterMain.exe -i {} -o {}", path, out_path);
+    ASSERT_EQ(0, std::system(cmd.c_str()));
+    ASSERT_TRUE(fs::is_regular_file(out_path));
 }
 TEST(Converter, parseCommentLine) {
     const vector<string_view> lines{
@@ -39,24 +77,27 @@ TEST(Converter, parseCommentLine) {
 TEST(Converter, parseValidLines) {
     //GTEST_SKIP() << "dev...";
     const pair<string_view, bqfs_cmd_t> checks[]{
-        {"W: AA 00 01 00", 
-			{CMD_W, 0xAA, 0x00, 
+        {"W: AA 00 01 00",
+			{CMD_W, 0xAA, 0x00,
 				{.bytes{0x01, 0x00}},
 				2,
             },
         },
-        {"C: AA 00 21 06", 
-			{CMD_C, 0xAA, 0x00, 
+        {"C: AA 00 21 06",
+			{CMD_C, 0xAA, 0x00,
 				{.bytes{0x21, 0x06}},
 				2,
             },
         },
         {"C: AA 60 A5",
-			{CMD_C, 0xAA, 0x60, 
+			{CMD_C, 0xAA, 0x60,
 				{.bytes{0xa5}},
 				1,
             },
         },
+        {"X: 2000",
+            {CMD_X, 0, 0, {.delay=2000}}
+        }
     };
     for (const auto& [line, expect] : checks) {
         const auto result = bc::parse_line(line);
@@ -65,7 +106,7 @@ TEST(Converter, parseValidLines) {
     }
 #if 0
     const auto w1 = bc::parse_line("W: AA 00 01 00");
-    const bqfs_cmd_t w1_expect{CMD_W, 0xAA, 0x00, 
+    const bqfs_cmd_t w1_expect{CMD_W, 0xAA, 0x00,
         {.bytes{0x01, 0x00}},
         2,
     };
@@ -96,7 +137,7 @@ TEST(Converter, str2uint_8) {
     };
     for (const auto [s, value] : checks) {
         const auto result = bc::str2uint8_t(s);
-        ASSERT_EQ(value, result) 
+        ASSERT_EQ(value, result)
             << format("Failed to convert \"{}\", {} != {}", s, value.value(), result.value());
     }
 }
@@ -112,7 +153,7 @@ TEST(Converter, str2uint16_t) {
         if (value) {
             ASSERT_TRUE(result) << format("Failed to convert uint16_t: \"{}\"", s);;
         }
-        ASSERT_EQ(value, result) 
+        ASSERT_EQ(value, result)
             << format("Failed to convert \"{}\", {} != {}", s, value.value(), result.value());
     }
 }
@@ -157,21 +198,41 @@ TEST(print_string, cmd_type_t_to_string) {
 
 }
 TEST(bqfs_cmd_t, cmp) {
-    const bqfs_cmd_t a{
-        .cmd_type = CMD_W,
-        .addr = 0XAA,
-        .reg = 0X0,
-        .data = {.bytes = {0x00, 0x00}},
-        .data_len = 2,
-    };
-    const bqfs_cmd_t b{
-        .cmd_type = CMD_W,
+    const bqfs_cmd_t not_equals[][2]{
+        {
+            {
+			.cmd_type = CMD_W,
+			.addr = 0XAA,
+			.reg = 0X0,
+			.data = {.bytes = {0x00, 0x00}},
+			.data_len = 2,
+			},
+            {
+            .cmd_type = CMD_W,
             .addr = 0XAA,
             .reg = 0X0,
             .data = {.bytes = {0x01, 0x00} },
             .data_len = 2,
+            },
+        },
+        {
+            {CMD_X, 0, 0, {.delay=2000}},
+            {CMD_X, 0, 0, {.delay=1000}},
+		},
+        {
+            {
+			.cmd_type = CMD_W,
+			.addr = 0XAA,
+			.reg = 0X0,
+			.data = {.bytes = {0x00, 0x00}},
+			.data_len = 2,
+			},
+            {CMD_X, 0, 0, {.delay=2000}},
+		},
     };
-    ASSERT_NE(a, b);
+    for (const auto& [left, right] : not_equals) {
+        ASSERT_NE(left, right);
+    }
 }
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

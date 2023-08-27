@@ -23,14 +23,49 @@ BqfsConverterLib::BqfsConverterLib(const string_view path)
 	if (!ifs) {
 		throw runtime_error(format("Failed to open file: {} at {}", path, fs::current_path().string()));
 	}
-	string line;
-	while (getline(ifs, line)) {
+
+	for (string line; getline(ifs, line);) {
+		if (line.starts_with(";")) {
+			continue;
+		}
+		const auto bqfs_cmd = parse_line(line);
+		if (!bqfs_cmd) {
+			throw runtime_error(format("Failed to parse line: \"{}\".", line));
+		}
+		values.push_back(bqfs_cmd.value());
 #if 0
 		cout << line ;
 		cout << format(" {:#x}", line.at(line.size() - 1));
 		cout << endl;
-#endif	
+#endif
 	}
+}
+
+void bc::write_to(const string_view path) const {
+	if (path == this->path) {
+		throw runtime_error("Error: write to path == source path.\n");
+	}
+	ofstream ofs{ path.data()};
+	if (!ofs) {
+		throw runtime_error(format("Failed to open file for write: {} at {}",
+			path, fs::current_path().string()));
+	}
+	const auto header{
+R"(#ifndef __BQFS_FILE__
+#define __BQFS_FILE__
+
+#include "bqfs_cmd_type.h"
+
+const bqfs_cmd_t bqfs_image[] = {
+)"};
+	ofs << header << endl;
+	for (const auto& e : values) {
+		ofs << format("{},\n", e.to_string("\t"));
+	}
+	ofs << "};\n"
+	"//end of const bqfs_cmd_t bqfs_image[]\n"
+	"#endif";
+	cout << format("Write to: {}\n", path);
 }
 optional<cmd_type_t> bc::guess_type(const char c) {
 	const static map<char, cmd_type_t> char_2_cmd_type_t{
@@ -71,28 +106,27 @@ optional<uint16_t> bc::str2uint16_t(const string_view s) {
 }
 
 optional<bqfs_cmd_t> bc::parse_line(const string_view line) {
-	if (line.starts_with(";")) {
-		return {};
-	}
 	try {
 		const auto first{ line.at(0) };
 		const cmd_type_t type = bc::guess_type(first).value();
 		const auto buf{ line.substr(1, 2) };
-		if (buf != ": ") { return {}; }
+		if (buf != ": ") {
+			cout << format("substr(1,2) is invalid: '{}'\n", buf);
+			return {}; }
 		const auto body{ line.substr(3) };
 
 		using namespace std::literals;
 		auto elements = body
 			| std::views::split(" "sv);
+		const vector<string_view> bufs{ elements.cbegin(), elements.cend() };
+		const size_t size = bufs.size();
 		if (type != CMD_X) {
-			vector<string_view> bufs{ elements.cbegin(), elements.cend() };
-			const size_t size = bufs.size();
-			if (size < 3) { 
+			if (size < 3) {
 				cout << format(R"(elements size({}) <= 3 for line "{}")",
 					size, line);
-				return {}; 
+				return {};
 			}
-			vector<uint8_t> values; 
+			vector<uint8_t> values;
 			for (const auto b : bufs) {
 				const auto op_value = str2uint8_t(b);
 				if (!op_value) {
@@ -123,6 +157,23 @@ optional<bqfs_cmd_t> bc::parse_line(const string_view line) {
 				cout << format("debug: e \"{}\"\n", string_view{ e });
 			}
 #endif
+		} // type != CMD_X
+		else {
+			if (size != 1) {
+				cout << format(R"(elements size({}) != 1 for line "{}")",
+					size, line);
+				return {};
+			}
+			const auto delay = str2uint16_t(bufs.at(0));
+			if (!delay) {
+				cout << format(R"(Failed to convert "{}" in line "{}")", bufs.at(0), line);
+			}
+			return bqfs_cmd_t {
+				.cmd_type = type,
+				.addr = 0,
+				.reg = 0,
+				.data{.delay = delay.value()},
+			};
 		}
 	}
 	catch (const std::bad_optional_access&) {

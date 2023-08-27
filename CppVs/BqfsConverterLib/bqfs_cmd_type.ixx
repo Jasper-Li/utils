@@ -16,8 +16,8 @@ constexpr size_t CMD_MAX_DATA_SIZE = 110;
 	ACTION(CMD_R), 	/* Read */ \
 	ACTION(CMD_W), 	/* Write */ \
 	ACTION(CMD_C), 	/* Compare */ \
-	ACTION(CMD_X), 	/* Delay */ 
- 
+	ACTION(CMD_X), 	/* Delay */
+
 export enum cmd_type_t {
 #define	ELE_DEFINE(ELE) ELE
 	ELEMENTS(ELE_DEFINE)
@@ -48,7 +48,7 @@ export struct bqfs_cmd_t {
 
 	static std::string bytes_to_string(const std::span<const uint8_t> bytes);
 	bool operator==(bqfs_cmd_t const& o) const;
-	std::string to_string() const;
+	std::string to_string(std::string fronter = "") const;
 };
 export namespace std {
 	void PrintTo(const bqfs_cmd_t& point, std::ostream* os);

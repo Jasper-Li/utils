@@ -32,24 +32,32 @@ std::string bqfs_cmd_t::bytes_to_string(const std::span<const uint8_t>bytes) {
 		|ranges::to<string>()
 		;
 }
-std::string bqfs_cmd_t::to_string() const {
+std::string bqfs_cmd_t::to_string(std::string fronter) const {
 	if (cmd_type == CMD_X) {
 		return format(
-			"{{\n"
-			"\t.cmd_type = {},\n"
-			"\t.data     = {{.delay = {}}},\n"
-			"}}", cmd_type_t_to_string(cmd_type), data.delay);
+			"{}{{\n"
+			"{}\t.cmd_type = {},\n"
+			"{}\t.data     = {{.delay = {}}},\n"
+			"{}}}", fronter,
+			fronter, cmd_type_t_to_string(cmd_type),
+			fronter, data.delay,
+			fronter);
 	}
 	else {
 		return format(
-			"{{\n"
-			"\t.cmd_type = {},\n"
-			"\t.addr     = {:#X},\n"
-			"\t.reg      = {:#X},\n"
-			"\t.data     = {{.bytes = {{{}}}}},\n"
-			"\t.data_len = {},\n"
-			"}}", cmd_type_t_to_string(cmd_type), addr, reg,
-			bytes_to_string({ this->data.bytes, this->data_len }), data_len);
+			"{}{{\n"
+			"{}\t.cmd_type = {},\n"
+			"{}\t.addr     = {:#04X},\n"
+			"{}\t.reg      = {:#04X},\n"
+			"{}\t.data     = {{.bytes = {{{}}}}},\n"
+			"{}\t.data_len = {},\n"
+			"{}}}", fronter,
+			fronter, cmd_type_t_to_string(cmd_type),
+			fronter, addr,
+			fronter, reg,
+			fronter, bytes_to_string({ this->data.bytes, this->data_len }),
+			fronter, data_len,
+			fronter);
 	}
 }
 namespace std {
