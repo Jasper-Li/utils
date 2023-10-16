@@ -38,8 +38,7 @@ def Adoc2Docx(adoc_file):
     cmd = 'pandoc -f ' + tmp_format + ' -t docx -o ' + docx_name + ' ' + tmp_name
     check_call(cmd, shell = True)
 
-    cmd = 'rm -rf ' + tmp_name
-    check_call(cmd, shell = True)
+    os.remove(tmp_name)
     print("Create file: ", docx_name)
 
     return 0
