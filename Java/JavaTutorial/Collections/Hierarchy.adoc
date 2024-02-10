@@ -1,0 +1,54 @@
+
+[plantuml, CollectionHierarchyInterface1]
+----
+@startuml
+interface Iterable
+interface Collection extends Iterable
+interface List extends Collection
+interface Set extends Collection
+interface SortedSet extends Set
+interface NavigableSet extends SortedSet
+
+@enduml
+----
+
+== Collection
+. Collection is a container.
+* add or remove elements;
+* test for the presence of a given element;
+* ask for the number of elements contained, or if this collection is empty;
+* clear this content.
+
+. Collection is a set of element.
+* testing for the inclusion of a set in another set;
+* union;
+* intersection;
+* complement.
+
+. Collection's accessing ways
+* iterate over all the elements
+* create a stream on these elements, that can be parallel.
+
+== List
+. List elements are ordered as they're added.
+. Every element has an index.
+* Get an element at a specific index, or delete it
+* Insert an element or replace an element at a specific position
+* Get a range of elements between two indexes.
+
+== Set
+. No duplicates
+
+=== Set extensions: SortedSet
+All elements sorted in the ascending order.
+
+. What you can to?
+* Get the lowest element, and the largest element of the set
+* Extract a *headSet* and a *tailSet* of all the elements lesser than, or greater than a given element.
+
+=== Set extensions: NavigableSet.
+The same as NavigableSet, except iterating over the elements in the descending order.
+
+== Q & A
+Which is the role of an interface? Specify a behaviour or an implementation?::
+an behaviour.

@@ -1,0 +1,57 @@
+:source-highlighter: rouge
+:SourceDirMain: Code/
+:SourceDirTest: Code/TutorialCollections/src/test/java
+
+== Handle Individual Elements
+.Handle Individual Element
+[%linenums, java]
+----
+include::{SourceDirTest}/CollectionsTest.java[lines=11..17;18..23]
+}
+----
+.output
+----
+strings=[one, two]
+strings=[two]
+----
+
+.Check for the presence of an element
+[%linenums, java]
+----
+include::{SourceDirTest}/CollectionsTest.java[lines=11..17;33..37]
+}
+----
+
+.toArray
+[%linenums, java]
+----
+include::{SourceDirTest}/CollectionsTest.java[lines=11..17;39..45]
+}
+----
+.output
+----
+element: one
+element: two
+----
+
+== Filter out elements
+TODO
+
+== Q & A
+What does true returned stand for?::
+boolean addAll(Collection<? extends E> c)::
+A. at least one has been added::
+B. all elements in c have been added::
+A
+
+
+////
+.
+[%linenums, java]
+----
+----
+
+.output
+----
+----
+////

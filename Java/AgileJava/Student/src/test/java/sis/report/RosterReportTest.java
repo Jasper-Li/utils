@@ -21,12 +21,6 @@ public class RosterReportTest {
         var rosterReport = new RosterReport(session);
         final var  report = rosterReport.getReport();
 // System.out.println(report);
-        final String rosterReportExpectOld =
-                RosterReport.ROSTER_REPORT_HEADER +
-                        "A" + NEW_LINE +
-                        "B" + NEW_LINE +
-                        RosterReport.ROSTER_REPORT_FOOTER +
-                        "2" + NEW_LINE;
         final String rosterReportExpect = STR."""
                 \{RosterReport.ROSTER_REPORT_HEADER}\
                 A\{NEW_LINE}\

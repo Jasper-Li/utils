@@ -1,14 +1,9 @@
 package sis.studentinfo;
 
-public class GradingStrategyHonours implements GradingStrategy {
+public class GradingStrategyHonours extends GradingStrategyBasic implements GradingStrategy {
     @Override
-    public int getGradeFor(Grade grade) {
-        return switch (grade) {
-            case Grade.A -> 5;
-            case Grade.B -> 4;
-            case Grade.C -> 3;
-            case Grade.D -> 2;
-            default ->  0;
-        };
+    public int getGradePointsFor(Grade grade) {
+        var basicGradePoints = basicGradePointsFor(grade);
+        return basicGradePoints > 0 ? basicGradePoints + 1 : 0;
     }
 }

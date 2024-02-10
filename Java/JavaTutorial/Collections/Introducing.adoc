@@ -1,0 +1,62 @@
+= Introducing the Collections Framework
+:toc:
+
+== History
+.Collections Framework History
+[%header%autowidth]
+|===
+|version | content
+|Java SE2 | first introduced
+|Java SE5 | generics introduced
+|Java 8 |Lambda expressions introduced
+|===
+
+== Content
+.Collections Framework OO Content
+[plantuml, CollectionsOoContent]
+----
+@startmindmap
+* Collections Framework
+** interfaces
+** implementations
+@endmindmap
+----
+.Collections Framework Logical Content
+[plantuml, CollectionsLogicalContent]
+----
+@startmindmap
+* Collections Framework
+** Collection
+*** Queue
+*** Stack
+***_ ...
+** Map
+** Iterator
+@endmindmap
+----
+== Avoiding Using Old Interfaces and Implementations
+
+[%header%autowidth]
+|===
+|Old |New non-concurrent | New concurrent
+|Vector |ArrayList |
+|Vector's Enumeration Interface |Iterator |Iterator
+|Stack |ArrayDeque |
+|HashTable |HashMap |ConcurrentHashMap
+|===
+
+== Prefer a Collections over an Array
+A Collection is an object, while an array is not.
+
+What can a collection do for you, that an array cannot?
+
+* A collection tracks the number of elements it contains
+* The capacity of a collection is not limited: you can add (almost) any amount of elements in a collection.
+* A collection can control what elements you may store in it. For instance, you can prevent null elements to be added.
+* A collection can be queried for the presence of a given element
+* A collection provides operations like intersecting or merging with another collection.
+
+
+== Q & A
+Which is an object, Collection or Array?::
+Collection

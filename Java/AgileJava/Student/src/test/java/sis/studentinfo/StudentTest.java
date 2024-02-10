@@ -10,6 +10,8 @@ public class StudentTest {
     private static final double GPA_TOLERANCE = 0.05;
     private Student student;
 
+    record GpaCheck(Grade grade, double gpaExpected) {
+    }
     @BeforeEach
     void setUp() {
         student = new Student(defaultName);
@@ -54,27 +56,27 @@ public class StudentTest {
         }
 
     }
-    private static GradePointCheck[] getGradePointCheckerBy(StudentType type) {
-        GradePointCheck[] honoursGradePoints  = {
-                new GradePointCheck(Grade.A, 5),
-                new GradePointCheck(Grade.B, 4),
-                new GradePointCheck(Grade.C, 3),
-                new GradePointCheck(Grade.D, 2),
-                new GradePointCheck(Grade.F, 0)
+    private static GradePointsCheck[] getGradePointCheckerBy(StudentType type) {
+        GradePointsCheck[] honoursGradePoints  = {
+                new GradePointsCheck(Grade.A, 5),
+                new GradePointsCheck(Grade.B, 4),
+                new GradePointsCheck(Grade.C, 3),
+                new GradePointsCheck(Grade.D, 2),
+                new GradePointsCheck(Grade.F, 0)
         };
-        GradePointCheck[] eliteGradePoints  = {
-                new GradePointCheck(Grade.A, 4),
-                new GradePointCheck(Grade.B, 4),
-                new GradePointCheck(Grade.C, 4),
-                new GradePointCheck(Grade.D, 4),
-                new GradePointCheck(Grade.F, 3)
+        GradePointsCheck[] eliteGradePoints  = {
+                new GradePointsCheck(Grade.A, 4),
+                new GradePointsCheck(Grade.B, 4),
+                new GradePointsCheck(Grade.C, 4),
+                new GradePointsCheck(Grade.D, 4),
+                new GradePointsCheck(Grade.F, 3)
         };
-        GradePointCheck[] regularGradePoints  = {
-                new GradePointCheck(Grade.A, 4),
-                new GradePointCheck(Grade.B, 3),
-                new GradePointCheck(Grade.C, 2),
-                new GradePointCheck(Grade.D, 1),
-                new GradePointCheck(Grade.F, 0)
+        GradePointsCheck[] regularGradePoints  = {
+                new GradePointsCheck(Grade.A, 4),
+                new GradePointsCheck(Grade.B, 3),
+                new GradePointsCheck(Grade.C, 2),
+                new GradePointsCheck(Grade.D, 1),
+                new GradePointsCheck(Grade.F, 0)
         };
         return switch (type) {
             case StudentType.Honours -> honoursGradePoints;

@@ -10,9 +10,7 @@ import static java.lang.StringTemplate.STR;
 
 class RosterReport {
     public static final String NEW_LINE = System.getProperty("line.separator");
-    public static final String ROSTER_REPORT_HEADER =
-            "Student" + NEW_LINE +
-            "----" + NEW_LINE;
+    public static final String ROSTER_REPORT_HEADER = STR."Student\{NEW_LINE}----\{NEW_LINE}";
     public static final String ROSTER_REPORT_FOOTER = STR."\{NEW_LINE}# student = ";
     private CourseSession session;
     public RosterReport(CourseSession session) {

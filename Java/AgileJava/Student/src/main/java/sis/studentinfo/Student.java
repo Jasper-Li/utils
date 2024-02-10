@@ -51,7 +51,7 @@ public class Student {
             return 0;
         double sum = 0.0;
         for (var grade : grades) {
-            sum += strategy.getGradeFor(grade);
+            sum += strategy.getGradePointsFor(grade);
         }
         return sum/grades.size();
     }

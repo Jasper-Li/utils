@@ -1,0 +1,3 @@
+:hardbreaks:
+
+. custom initialization with {} in an array.

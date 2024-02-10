@@ -1,5 +1,5 @@
 package sis.studentinfo;
 
 public interface GradingStrategy {
-    int getGradeFor(Grade grade);
+    int getGradePointsFor(Grade grade);
 }
