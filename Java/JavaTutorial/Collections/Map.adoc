@@ -1,0 +1,67 @@
+:hardbreaks:
+:source-highlighter: rouge
+:experimental:
+:imagesdir: _images
+
+
+.EnumMap Hierarchy
+[plantuml, EnumMapHierarchy]
+----
+@startuml
+interface Collection
+interface Map extends Collection
+interface Clonable
+interface Serializable
+abstract AbstractMap implements Map
+class EnumMap extends AbstractMap
+class EnumMap implements Clonable, Serializable
+@enduml
+----
+
+A key-value pair in a map forms an *entry* of that map.
+
+==  Constructor
+
+.Map.of static method
+[%lines, Java]
+----
+Map<Integer, String> map =
+    Map.of(
+        1, "one",
+        2, "two",
+        3, "three"
+    );
+----
+.Map.ofEntries
+[%lines, Java]
+----
+Map<Integer, String> map3 =
+    Map.ofEntries(
+        entry(1, "one"),
+        entry(2, "two"),
+        entry(3, "three")
+    );
+----
+
+Restrictions:
+
+* No more than 10 key-value pairs.
+* Only immutable objects
+* No Null entries, null keys, and null values.
+* No duplicate keys.
+
+.General constructor
+[%lines, Java]
+----
+var map4 = new Map<Integer, String>();
+map4.put(1, "one");
+----
+
+
+////
+.
+[%lines, Java]
+----
+----
+////
+
