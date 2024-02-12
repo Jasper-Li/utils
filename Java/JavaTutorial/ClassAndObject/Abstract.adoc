@@ -1,0 +1,15 @@
+= abstract
+:hardbreaks:
+
+== Q & A
+. When you cannot or don't wish to supply an implementation for a method, you can use keyword \___.
+
+ abstract
+
+. If a class contains at least one `abstract` method, it must be defined as an \___ class.
+
+ abstract
+
+. Any class extending from an `abstract` class must either implement all inherited \___ methods, otherwise it must be declared as \___.
+
+ abstract

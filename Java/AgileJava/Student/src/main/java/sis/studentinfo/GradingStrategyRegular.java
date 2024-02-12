@@ -1,8 +1,7 @@
 package sis.studentinfo;
 
-public class GradingStrategyRegular extends GradingStrategyBasic implements  GradingStrategy{
-    @Override
+public class GradingStrategyRegular implements  GradingStrategy{
     public int getGradePointsFor(Grade grade) {
-        return basicGradePointsFor(grade);
+        return grade.getPoints();
     }
 }

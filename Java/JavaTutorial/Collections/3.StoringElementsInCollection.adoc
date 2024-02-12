@@ -1,6 +1,5 @@
 :source-highlighter: rouge
-:SourceDirMain: Code/
-:SourceDirTest: Code/TutorialCollections/src/test/java
+:SourceDirTest: ../CodeJava/TutorialCollections/src/test/java
 
 == Handle Individual Elements
 .Handle Individual Element

@@ -2,3 +2,19 @@
 == Questions
 The *extends* clause must appear \___(before/after) any *implements* clause. ::
 before
+
+A call to a superclass constructor must appear as the \___ line in a subclass constructor.::
+first
+
+If you don’t define a constructor Java will automatically \___ ::
+generate a default, no-argument constructor.
+
+if you do supply a constructor with arguments in a class, Java \___ (does/does not) automatically supply a no-argument constructor::
+does not
+
+
+If you do not provide a super call in a subclass constructor, it is as if Java inserted a call to the \___ superclass constructor. ::
+no-argument
+If a subclass constructors that take parameters, it call the \___  superclass constructor by default.::
+no-argument
+

@@ -1,0 +1,6 @@
+:hardbreaks:
+:source-highlighter: rouge
+
+== Enum with values
+
+TODO: compared with C++
