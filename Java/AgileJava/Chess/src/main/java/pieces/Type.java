@@ -1,5 +1,7 @@
 package pieces;
 
+import java.util.Map;
+
 public enum Type {
     King,
     Queen,
@@ -8,6 +10,8 @@ public enum Type {
     Pawn,
     Knight,
     NoPiece;
+
+    private static Map<Type, Double> typeToPoint = null;
 
     public static final char KING_REPRESENTATION = 'k';
     public static final char QUEEN_REPRESENTATION = 'q';
@@ -32,6 +36,22 @@ public enum Type {
             case Knight -> 'n';
             default -> '.';
         };
+    }
+    private static void initializeTypeToPoint(){
+        typeToPoint = Map.of(
+                Queen, 9.0,
+                Rook, 5.0,
+                Bishop, 3.0,
+                Knight, 2.5,
+                Pawn, 1.0
+        );
+    }
+
+    public double getPoint() {
+        if(typeToPoint == null) {
+            initializeTypeToPoint();
+        }
+        return typeToPoint.getOrDefault(this, 0.0);
     }
 }
 

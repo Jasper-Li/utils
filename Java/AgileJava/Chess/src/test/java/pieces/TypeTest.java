@@ -29,4 +29,18 @@ class TypeTest {
 
     }
 
+    @Test
+    void getPoint() {
+        record Check(Type type, Double point){};
+        final Check[] checks = {
+            new Check(Type.Queen, 9.0),
+            new Check(Type.Rook, 5.0),
+            new Check(Type.Bishop, 3.0),
+            new Check(Type.Knight, 2.5),
+            new Check(Type.Pawn, 1.0),
+        };
+        for (var check : checks) {
+            assertEquals(check.point, check.type.getPoint());
+        }
+    }
 }
