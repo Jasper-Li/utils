@@ -67,7 +67,7 @@ public class Piece implements Comparable<Piece>{
     }
     public char toChar() {
         if (type == Type.NoPiece) return '.';
-        final var name = type.toChar();
+        final var name = type.getRepresentation();
         return color == Color.Black?
                 Character.toUpperCase(name) : name;
     }

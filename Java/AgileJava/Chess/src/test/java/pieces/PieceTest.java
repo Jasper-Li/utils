@@ -20,12 +20,12 @@ class PieceTest {
 
         record CreateCheck(Type type, char representation){}
         CreateCheck[] checks = {
-            new CreateCheck(Type.King, Type.KING_REPRESENTATION),
-            new CreateCheck(Type.Queen, Type.QUEEN_REPRESENTATION),
-            new CreateCheck(Type.Rook, Type.ROOK_REPRESENTATION),
-            new CreateCheck(Type.Bishop, Type.BISHOP_REPRESENTATION),
-            new CreateCheck(Type.Knight, Type.KNIGHT_REPRESENTATION),
-            new CreateCheck(Type.Pawn, Type.PAWN_REPRESENTATION),
+            new CreateCheck(Type.King, Type.Representation.KING),
+            new CreateCheck(Type.Queen, Type.Representation.QUEEN),
+            new CreateCheck(Type.Rook, Type.Representation.ROOK),
+            new CreateCheck(Type.Bishop, Type.Representation.BISHOP),
+            new CreateCheck(Type.Knight, Type.Representation.KNIGHT),
+            new CreateCheck(Type.Pawn, Type.Representation.PAWN),
         };
         for (final var check : checks){
             verifyCreate(check.type(), check.representation());

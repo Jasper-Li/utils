@@ -1,42 +1,50 @@
 package pieces;
 
 import java.util.Map;
+import static pieces.Type.Representation.*;
 
 public enum Type {
-    King,
-    Queen,
-    Rook,
-    Bishop,
-    Pawn,
-    Knight,
-    NoPiece;
+    King(KING),
+    Queen(QUEEN),
+    Rook(ROOK),
+    Bishop(BISHOP),
+    Pawn(PAWN),
+    Knight(KNIGHT),
+    NoPiece(NO_PIECE);
 
+    public static abstract class Representation {
+        public static final char KING = 'k';
+        public static final char QUEEN = 'q';
+        public static final char ROOK = 'r';
+        public static final char BISHOP = 'b';
+        public static final char KNIGHT = 'n';
+        public static final char PAWN = 'p';
+        public static final char NO_PIECE = '.';
+    }
     private static Map<Type, Double> typeToPoint = null;
+    private static Map<Character, Type> representationToType = null;
+    private final char representation;
+    Type(char representation){
+        this.representation = representation;
+    }
 
-    public static final char KING_REPRESENTATION = 'k';
-    public static final char QUEEN_REPRESENTATION = 'q';
-    public static final char ROOK_REPRESENTATION = 'r';
-    public static final char BISHOP_REPRESENTATION = 'b';
-    public static final char KNIGHT_REPRESENTATION = 'n';
-    public static final char PAWN_REPRESENTATION = 'p';
     public static Type valueOf(char representation) {
-        return switch (Character.toLowerCase(representation)) {
-            case KING_REPRESENTATION -> Type.King;
-            case QUEEN_REPRESENTATION -> Type.Queen;
-            case ROOK_REPRESENTATION -> Type.Rook;
-            case BISHOP_REPRESENTATION -> Type.Bishop;
-            case KNIGHT_REPRESENTATION -> Type.Knight;
-            case PAWN_REPRESENTATION -> Type.Pawn;
-            default -> Type.NoPiece;
-        };
+        final var lowerCase = Character.toLowerCase(representation);
+        if(representationToType == null){
+            initRepresentationToType();
+        }
+        return representationToType.getOrDefault(lowerCase, NoPiece);
     }
-    public char toChar() {
-        return switch (this){
-            case King, Queen, Rook, Bishop, Pawn -> Character.toLowerCase(this.name().charAt(0));
-            case Knight -> 'n';
-            default -> '.';
-        };
+    public char getRepresentation() {
+        return representation;
     }
+    public double getPoint() {
+        if(typeToPoint == null) {
+            initializeTypeToPoint();
+        }
+        return typeToPoint.getOrDefault(this, 0.0);
+    }
+
     private static void initializeTypeToPoint(){
         typeToPoint = Map.of(
                 Queen, 9.0,
@@ -46,12 +54,15 @@ public enum Type {
                 Pawn, 1.0
         );
     }
-
-    public double getPoint() {
-        if(typeToPoint == null) {
-            initializeTypeToPoint();
-        }
-        return typeToPoint.getOrDefault(this, 0.0);
+    private static void initRepresentationToType() {
+        representationToType = Map.of(
+                KING, King,
+                QUEEN, Queen,
+                ROOK, Rook,
+                BISHOP, Bishop,
+                KNIGHT, Knight,
+                PAWN, Pawn
+        );
     }
 }
 
