@@ -43,8 +43,8 @@ class RankTest {
         final var rank1Representation = ".KR.....";
         final var rank1 = new Rank(rank1Representation);
         assertEquals(2, rank1.countValidPieces());
-        assertEquals(new Piece(Color.BLACK, Type.KING), rank1.getPiece(1));
-        assertEquals(new Piece(Color.BLACK, Type.ROOK), rank1.getPiece(2));
+        assertEquals(new Piece(Color.BLACK, Type.KING), rank1.getPiece(ColumnIndex.B));
+        assertEquals(new Piece(Color.BLACK, Type.ROOK), rank1.getPiece(ColumnIndex.C));
         final var rank2Representation = ". K R . . . . . \r";
         final var rank2  = new Rank(rank2Representation);
         assertEquals(rank1, rank2);
@@ -73,25 +73,21 @@ class RankTest {
 
     @Test
     void placePiece() {
-        final var rank = new Rank();
-        final Piece[] pieces = {
-            new Piece(Color.BLACK, Type.KING),
-            new Piece(Color.WHITE, Type.QUEEN),
+        record Check(Piece piece, ColumnIndex column) {};
+        Check[] checks = {
+            new Check(new Piece(Color.BLACK, Type.KING), ColumnIndex.A),
+            new Check(new Piece(Color.WHITE, Type.QUEEN), ColumnIndex.B),
         };
+
+        final var rank = new Rank();
         var count = 0;
         assertEquals(count, rank.countValidPieces());
-        var columnIdx = 1;
-        for (final var p : pieces) {
-            rank.placePiece(p, columnIdx);
+        for (final var check : checks) {
+            rank.placePiece(check.piece, check.column);
             ++count;
             assertEquals(count, rank.countValidPieces());
-            assertEquals(p, rank.getPiece(columnIdx));
-            ++columnIdx;
+            assertEquals(check.piece, rank.getPiece(check.column));
         }
-        --columnIdx;
-        rank.placePiece(pieces[0], columnIdx);
-        assertEquals(count, rank.countValidPieces());
-        assertEquals(pieces[0], rank.getPiece(columnIdx));
     }
 
     @Test

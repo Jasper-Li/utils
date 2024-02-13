@@ -7,21 +7,15 @@ import java.util.List;
 
 public class Printer {
     public static String print(Board board) {
-        if(board.countRanks() != Board.RANK_COUNT) return "";
-        StringBuilder buffer = new StringBuilder();
-        for(int i = Board.RANK_COUNT; i > 0; --i) {
-            var rank = board.getRank(i).toString();
-            var line = StringUtil.appendNewLine(rank);
-            buffer.append(line);
-        }
-        return buffer.toString();
+        return board.toString();
     }
 
     public static String printByStringConcatenation(Board board) {
         if(board.countRanks() != Board.RANK_COUNT) return "";
         String result = new String();
         for(int i = Board.RANK_COUNT; i > 0; --i) {
-            var rank = board.getRank(i).toString();
+            var rankIndex = RankIndex.of((char)('0' + i));
+            var rank = board.getRank(rankIndex).toString();
             var line = StringUtil.appendNewLine(rank);
             result += line;
         }

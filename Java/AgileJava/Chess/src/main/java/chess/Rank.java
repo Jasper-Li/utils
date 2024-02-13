@@ -44,13 +44,8 @@ public class Rank {
         return count;
     }
 
-    /**
-     *
-     * @param index, count from 0.
-     * @return
-     */
-    Piece getPiece(int index) {
-        return pieces.get(index);
+    Piece getPiece(ColumnIndex column ) {
+        return pieces.get(column.getInternalIndex());
     }
 
     public String toString(){
@@ -77,8 +72,8 @@ public class Rank {
      * @param column, count from 0.
      * @return
      */
-    public void placePiece(Piece piece, int column) {
-        pieces.set(column, piece);
+    public void placePiece(Piece piece, ColumnIndex column) {
+        pieces.set(column.getInternalIndex(), piece);
     }
 
     public List<Piece> getPieces(Color color) {

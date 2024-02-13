@@ -8,6 +8,7 @@ import pieces.Type;
 
 import java.util.List;
 
+import static java.lang.System.out;
 import static org.junit.jupiter.api.Assertions.*;
 import static util.StringUtil.NEW_LINE;
 
@@ -47,6 +48,7 @@ public class BoardTest {
 
         Piece.resetPiecesCount(0, 0);
         board.initialize();
+        out.println(board);
         Rank rank2 = board.getRank(Board.WHITE_SECOND_RANK_INDEX_ON_BOARD);
         assertEquals("pppppppp", rank2.toString());
         assertEquals(
@@ -160,7 +162,7 @@ public class BoardTest {
                 a b c d e f g h
                 """;
         board = new Board(representation);
-        final Column column0 = board.getColumn(0);
+        final Column column0 = board.getColumn(ColumnIndex.A);
         final Column columnExpected = new Column("......P.");
         assertEquals(columnExpected, column0);
 
@@ -201,5 +203,4 @@ public class BoardTest {
             );
         }
     }
-
 }

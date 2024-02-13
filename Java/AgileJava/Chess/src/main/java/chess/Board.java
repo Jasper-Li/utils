@@ -2,6 +2,7 @@ package chess;
 
 import pieces.Color;
 import pieces.Piece;
+import util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,10 +12,10 @@ import java.util.List;
 public class Board {
     public static final int RANK_COUNT = 8;
     public static final int COLUMN_COUNT = 8;
-    public static final int WHITE_BACK_RANK_INDEX_ON_BOARD = 1;
-    public static final int WHITE_SECOND_RANK_INDEX_ON_BOARD = 2;
-    public static final int BLACK_SECOND_RANK_INDEX_ON_BOARD = 7;
-    public static final int BLACK_BACK_RANK_INDEX_ON_BOARD = 8;
+    public static final RankIndex  WHITE_BACK_RANK_INDEX_ON_BOARD = RankIndex.R1;
+    public static final RankIndex WHITE_SECOND_RANK_INDEX_ON_BOARD = RankIndex.R2;
+    public static final RankIndex BLACK_SECOND_RANK_INDEX_ON_BOARD = RankIndex.R7;
+    public static final RankIndex BLACK_BACK_RANK_INDEX_ON_BOARD = RankIndex.R8;
     private final List<Rank> ranks = new ArrayList<Rank>(RANK_COUNT);
     public Board() {
         for (int i = 0; i < RANK_COUNT; ++i) {
@@ -31,23 +32,24 @@ public class Board {
         }
     }
     public Board initialize() {
+        var rankIndex = RankIndex.R1;
         for(int i = 0; i < RANK_COUNT; ++i) {
-            var boardIndex = i + 1;
-            switch (boardIndex) {
-                case WHITE_BACK_RANK_INDEX_ON_BOARD -> {
+            switch (rankIndex) {
+                case RankIndex.R1-> {
                    ranks.set(i, new Rank(Color.WHITE, new BackRankArrangement()));
                 }
-                case WHITE_SECOND_RANK_INDEX_ON_BOARD -> {
+                case RankIndex.R2-> {
                     ranks.set(i, new Rank(Color.WHITE, new SecondRankArrangement()));
                 }
-                case BLACK_SECOND_RANK_INDEX_ON_BOARD -> {
+                case RankIndex.R7-> {
                     ranks.set(i, new Rank(Color.BLACK, new SecondRankArrangement()));
                 }
-                case BLACK_BACK_RANK_INDEX_ON_BOARD -> {
+                case RankIndex.R8-> {
                     ranks.set(i, new Rank(Color.BLACK, new BackRankArrangement()));
                 }
                 default -> ranks.set(i, new Rank());
             };
+            rankIndex = rankIndex.increment();
         }
         return this;
     }
@@ -61,9 +63,8 @@ public class Board {
         }
         return count;
     }
-    public Rank getRank(int boardIndex) {
-        final var listIndex = boardIndex - 1;
-        return ranks.get(listIndex);
+    public Rank getRank(RankIndex rank) {
+        return ranks.get(rank.getInternalIndex());
     }
 
     public int count(Piece piece) {
@@ -75,34 +76,33 @@ public class Board {
     }
 
     public Piece getPieceBy(Location location) {
-        final int column = location.column();
-        final int rank = location.rank();
+        final var column = location.column();
+        final var rank = location.rank();
         return getRank(rank).getPiece(column);
     }
 
     public void placePiece(Piece piece, Location location) {
-        final int column = location.column();
-        final int rank = location.rank();
+        final var column = location.column();
+        final var rank = location.rank();
         getRank(rank).placePiece(piece, column);
     }
 
-    /**
-     * @param index: count from 0.
-     */
-    public Column getColumn(int index) {
+    public Column getColumn(ColumnIndex columnIndex) {
         List<Piece> pieces = new ArrayList<Piece>();
         for (var rank : ranks) {
-            pieces.add(rank.getPiece(index));
+            pieces.add(rank.getPiece(columnIndex));
         }
         return new Column(pieces);
     }
 
     public double getStrength(Color color) {
         double points = 0;
+        var columnIndex = ColumnIndex.A;
         for(int i =0 ; i< COLUMN_COUNT; ++i)  {
-            final var column = getColumn(i);
+            final var column = getColumn(columnIndex);
             final var point = column.getStrength(color);
             points += point;
+            columnIndex = columnIndex.increment();
         }
         return points;
     }
@@ -114,5 +114,15 @@ public class Board {
         }
         pieces.sort(Collections.reverseOrder());
         return pieces;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder buffer = new StringBuilder();
+        for(var i = ranks.size() - 1; i >=0; --i) {
+            buffer.append(ranks.get(i).toString());
+            buffer.append(StringUtil.NEW_LINE);
+        }
+        return buffer.toString();
     }
 }

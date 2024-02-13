@@ -59,7 +59,8 @@ public class Column {
         return points;
     }
     public double getStrength(Color color) {
-        return getStrength(getTypeCount(color), color);
+        var typeCount = getTypeCount(color);
+        return getStrength(typeCount, color);
     }
     /**
      *

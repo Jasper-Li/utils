@@ -32,4 +32,35 @@ class ColumnTest {
         assertEquals(1.0, column.getStrength(Color.BLACK));
         assertEquals(0.0, column.getStrength(Color.WHITE));
     }
+
+    @Test
+    void getStrength() {
+        record Check(String representation, double strengthWhite, double strengtBlack){};
+        Check[] checks = {
+            new Check("......p.", 1.0, 0.0),
+                new Check("......P.", 0.0, 1.0),
+        };
+        for(final var check : checks){
+            var column =  new Column(check.representation);
+            assertEquals(check.strengtBlack, column.getStrength(Color.BLACK));
+            assertEquals(check.strengthWhite, column.getStrength(Color.WHITE));
+        }
+    }
+
+    @Test
+    void getTypeCount() {
+        record Check(String representation, EnumMap<Type, Integer> countWhite, EnumMap<Type, Integer> countBlack){};
+        Check[] checks = {
+            new Check(
+                "...P...p",
+                new EnumMap<>(Map.of(Type.PAWN, 1)),
+                new EnumMap<>(Map.of(Type.PAWN, 1))
+            ),
+        };
+        for (final var check : checks) {
+            var column = new Column(check.representation);
+            assertEquals(check.countWhite, column.getTypeCount(Color.WHITE));
+            assertEquals(check.countBlack, column.getTypeCount(Color.BLACK));
+        }
+    }
 }
