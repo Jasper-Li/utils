@@ -60,6 +60,7 @@
                     <version>3.2.2</version>
                     <configuration>
                         <test>AllTests</test>
+                        <argLine>--enable-preview</argLine>
                     </configuration>
                 </plugin>
             </plugins>
