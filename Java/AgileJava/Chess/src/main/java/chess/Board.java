@@ -35,26 +35,26 @@ public class Board {
             var boardIndex = i + 1;
             switch (boardIndex) {
                 case WHITE_BACK_RANK_INDEX_ON_BOARD -> {
-                   ranks.set(i, new Rank(Color.White, new BackRankArrangement()));
+                   ranks.set(i, new Rank(Color.WHITE, new BackRankArrangement()));
                 }
                 case WHITE_SECOND_RANK_INDEX_ON_BOARD -> {
-                    ranks.set(i, new Rank(Color.White, new SecondRankArrangement()));
+                    ranks.set(i, new Rank(Color.WHITE, new SecondRankArrangement()));
                 }
                 case BLACK_SECOND_RANK_INDEX_ON_BOARD -> {
-                    ranks.set(i, new Rank(Color.Black, new SecondRankArrangement()));
+                    ranks.set(i, new Rank(Color.BLACK, new SecondRankArrangement()));
                 }
                 case BLACK_BACK_RANK_INDEX_ON_BOARD -> {
-                    ranks.set(i, new Rank(Color.Black, new BackRankArrangement()));
+                    ranks.set(i, new Rank(Color.BLACK, new BackRankArrangement()));
                 }
                 default -> ranks.set(i, new Rank());
             };
         }
         return this;
     }
-    public int rankCount() {
+    public int countRanks() {
         return ranks.size();
     }
-    public int pieceCount() {
+    public int countAllPieces() {
         int count = 0;
         for (var rank : ranks) {
             count += rank.countValidPieces();
@@ -74,7 +74,7 @@ public class Board {
         return count;
     }
 
-    public Piece getPieceBy(chess.Location location) {
+    public Piece getPieceBy(Location location) {
         final int column = location.column();
         final int rank = location.rank();
         return getRank(rank).getPiece(column);

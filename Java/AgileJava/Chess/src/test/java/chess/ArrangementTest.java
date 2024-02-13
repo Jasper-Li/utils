@@ -14,12 +14,12 @@ class ArrangementTest {
         final List<Type> secondRank = new SecondRankArrangement().names();
         assertEquals(8, secondRank.size());
         for (var name : secondRank) {
-            assertEquals(Type.Pawn, name);
+            assertEquals(Type.PAWN, name);
         }
 
         final List<Type> backRank = new BackRankArrangement().names();
         assertEquals(8, backRank.size());
-        assertEquals(Type.Rook, backRank.getFirst());
-        assertEquals(Type.Rook, backRank.getLast());
+        assertEquals(Type.ROOK, backRank.getFirst());
+        assertEquals(Type.ROOK, backRank.getLast());
     }
 }

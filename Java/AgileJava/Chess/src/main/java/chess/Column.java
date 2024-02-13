@@ -43,7 +43,7 @@ public class Column {
 
     public static double getPoint(EnumMap<Type, Integer> piecesCount, Type type){
         var point = type.getPoint();
-        if(type == Pawn && piecesCount.getOrDefault(type, 0) > 1) {
+        if(type == PAWN && piecesCount.getOrDefault(type, 0) > 1) {
             point = 0.5;
         }
         return point;

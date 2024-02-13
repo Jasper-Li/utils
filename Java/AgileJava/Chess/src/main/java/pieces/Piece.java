@@ -21,17 +21,17 @@ public class Piece implements Comparable<Piece>{
      * blank piece. Type.NoPiece
      */
     public Piece(){
-        this(Color.None, Type.NoPiece);
+        this(Color.NONE, Type.NO_PIECE);
     }
 
     public Piece(Character representation) {
         type = Type.valueOf(representation);
-        if (type == Type.NoPiece){
-            color = Color.None;
+        if (type == Type.NO_PIECE){
+            color = Color.NONE;
         } else if (Character.isUpperCase(representation)) {
-            color = Color.Black;
+            color = Color.BLACK;
         } else {
-            color = Color.White;
+            color = Color.WHITE;
         }
         updateStaticWhiteBlackCount();
     }
@@ -42,8 +42,8 @@ public class Piece implements Comparable<Piece>{
     }
     private void updateStaticWhiteBlackCount(){
         switch (color){
-            case Color.White -> ++whitePiecesCount;
-            case Color.Black -> ++blackPiecesCount;
+            case Color.WHITE -> ++whitePiecesCount;
+            case Color.BLACK -> ++blackPiecesCount;
         };
     }
     @Override
@@ -52,13 +52,13 @@ public class Piece implements Comparable<Piece>{
             color == other.color && type == other.type;
     }
     public boolean isBlack() {
-        return color == Color.Black;
+        return color == Color.BLACK;
     }
     public boolean isWhite() {
-        return color == Color.White;
+        return color == Color.WHITE;
     }
     public boolean isEmpty() {
-        return type == Type.NoPiece;
+        return type == Type.NO_PIECE;
     }
     public Color color() {return color;}
     public Type type() {return type;}
@@ -66,9 +66,9 @@ public class Piece implements Comparable<Piece>{
         return Character.toString(toChar());
     }
     public char toChar() {
-        if (type == Type.NoPiece) return '.';
+        if (type == Type.NO_PIECE) return '.';
         final var name = type.getRepresentation();
-        return color == Color.Black?
+        return color == Color.BLACK ?
                 Character.toUpperCase(name) : name;
     }
 

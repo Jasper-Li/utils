@@ -9,8 +9,8 @@ public class BackRankArrangement implements  Arrangement{
     @Override
     public List<Type> names() {
         return new ArrayList<>(List.of(
-            Type.Rook, Type.Knight, Type.Bishop, Type.Queen,
-            Type.King, Type.Bishop, Type.Knight, Type.Rook
+            Type.ROOK, Type.KNIGHT, Type.BISHOP, Type.QUEEN,
+            Type.KING, Type.BISHOP, Type.KNIGHT, Type.ROOK
         ));
     }
 }

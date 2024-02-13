@@ -2,8 +2,6 @@ package pieces;
 
 import org.junit.jupiter.api.Test;
 
-import java.time.Period;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
@@ -14,31 +12,31 @@ class PieceTest {
     void create() {
         final var blank = new Piece();
         assertTrue(blank.isEmpty());
-        assertEquals(Color.None, blank.color());
-        assertEquals(Type.NoPiece, blank.type());
+        assertEquals(Color.NONE, blank.color());
+        assertEquals(Type.NO_PIECE, blank.type());
         assertEquals(".", blank.toString());
 
         record CreateCheck(Type type, char representation){}
         CreateCheck[] checks = {
-            new CreateCheck(Type.King, Type.Representation.KING),
-            new CreateCheck(Type.Queen, Type.Representation.QUEEN),
-            new CreateCheck(Type.Rook, Type.Representation.ROOK),
-            new CreateCheck(Type.Bishop, Type.Representation.BISHOP),
-            new CreateCheck(Type.Knight, Type.Representation.KNIGHT),
-            new CreateCheck(Type.Pawn, Type.Representation.PAWN),
+            new CreateCheck(Type.KING, Type.Representation.R_KING),
+            new CreateCheck(Type.QUEEN, Type.Representation.R_QUEEN),
+            new CreateCheck(Type.ROOK, Type.Representation.R_ROOK),
+            new CreateCheck(Type.BISHOP, Type.Representation.R_BISHOP),
+            new CreateCheck(Type.KNIGHT, Type.Representation.R_KNIGHT),
+            new CreateCheck(Type.PAWN, Type.Representation.R_PAWN),
         };
         for (final var check : checks){
             verifyCreate(check.type(), check.representation());
         }
     }
     private void verifyCreate(Type type, Character representation){
-        final var whitePiece = new Piece(Color.White, type);
+        final var whitePiece = new Piece(Color.WHITE, type);
         assertTrue(whitePiece.isWhite());
         assertEquals(representation.toString(), whitePiece.toString());
         assertEquals(type, whitePiece.type());
         assertFalse(whitePiece.isEmpty());
 
-        final var blackPiece = new Piece(Color.Black, type);
+        final var blackPiece = new Piece(Color.BLACK, type);
         assertTrue(blackPiece.isBlack());
         assertEquals(type, blackPiece.type());
         assertEquals(Character.toUpperCase(representation), blackPiece.toString().charAt(0));
@@ -50,32 +48,32 @@ class PieceTest {
         assertEquals(0, Piece.getBlackPiecesCount());
         assertEquals(0, Piece.getWhitePiecesCount());
 
-        final var blackPawn = new Piece(Color.Black, Type.Pawn);
+        final var blackPawn = new Piece(Color.BLACK, Type.PAWN);
         assertEquals(1, Piece.getBlackPiecesCount());
 
-        final var whiteKnight = new Piece(Color.White, Type.Knight);
+        final var whiteKnight = new Piece(Color.WHITE, Type.KNIGHT);
         assertEquals(1, Piece.getWhitePiecesCount());
     }
     @Test
     void createByRepresentation() {
         record RepresentationCreationCheck(Character repr, Color color, Type type){}
         final RepresentationCreationCheck[] checks = {
-                new RepresentationCreationCheck('.', Color.None, Type.NoPiece),
-                new RepresentationCreationCheck('k', Color.White, Type.King),
-                new RepresentationCreationCheck('q', Color.White, Type.Queen),
-                new RepresentationCreationCheck('r', Color.White, Type.Rook),
-                new RepresentationCreationCheck('b', Color.White, Type.Bishop),
-                new RepresentationCreationCheck('n', Color.White, Type.Knight),
-                new RepresentationCreationCheck('p', Color.White, Type.Pawn),
+                new RepresentationCreationCheck('.', Color.NONE, Type.NO_PIECE),
+                new RepresentationCreationCheck('k', Color.WHITE, Type.KING),
+                new RepresentationCreationCheck('q', Color.WHITE, Type.QUEEN),
+                new RepresentationCreationCheck('r', Color.WHITE, Type.ROOK),
+                new RepresentationCreationCheck('b', Color.WHITE, Type.BISHOP),
+                new RepresentationCreationCheck('n', Color.WHITE, Type.KNIGHT),
+                new RepresentationCreationCheck('p', Color.WHITE, Type.PAWN),
 
-                new RepresentationCreationCheck('K', Color.Black, Type.King),
-                new RepresentationCreationCheck('Q', Color.Black, Type.Queen),
-                new RepresentationCreationCheck('R', Color.Black, Type.Rook),
-                new RepresentationCreationCheck('B', Color.Black, Type.Bishop),
-                new RepresentationCreationCheck('N', Color.Black, Type.Knight),
-                new RepresentationCreationCheck('P', Color.Black, Type.Pawn),
+                new RepresentationCreationCheck('K', Color.BLACK, Type.KING),
+                new RepresentationCreationCheck('Q', Color.BLACK, Type.QUEEN),
+                new RepresentationCreationCheck('R', Color.BLACK, Type.ROOK),
+                new RepresentationCreationCheck('B', Color.BLACK, Type.BISHOP),
+                new RepresentationCreationCheck('N', Color.BLACK, Type.KNIGHT),
+                new RepresentationCreationCheck('P', Color.BLACK, Type.PAWN),
                 // invalid
-                new RepresentationCreationCheck('Z', Color.None, Type.NoPiece),
+                new RepresentationCreationCheck('Z', Color.NONE, Type.NO_PIECE),
         };
         for (var check : checks) {
             final var pieceExpected = new Piece(check.color(), check.type());

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import pieces.Color;
 import pieces.Piece;
 import pieces.Type;
-import util.StringUtil;
 
 import java.util.List;
 
@@ -43,8 +42,8 @@ public class BoardTest {
     }
     @Test
     void create() {
-        assertEquals(Board.RANK_COUNT, board.rankCount());
-        assertEquals(0, board.pieceCount());
+        assertEquals(Board.RANK_COUNT, board.countRanks());
+        assertEquals(0, board.countAllPieces());
 
         Piece.resetPiecesCount(0, 0);
         board.initialize();
@@ -54,7 +53,7 @@ public class BoardTest {
                 "PPPPPPPP",
                 board.getRank(Board.BLACK_SECOND_RANK_INDEX_ON_BOARD).toString());
 
-        assertEquals(32, board.pieceCount());
+        assertEquals(32, board.countAllPieces());
         assertEquals(16, Piece.getBlackPiecesCount());
         assertEquals(16, Piece.getWhitePiecesCount());
 
@@ -104,34 +103,34 @@ public class BoardTest {
     void countPiece() {
         board = new Board(boardRepresentationTest_5_4);
         var blackPawnCountExpected = 3;
-        assertEquals(blackPawnCountExpected, board.count(new Piece(Color.Black, Type.Pawn)));
+        assertEquals(blackPawnCountExpected, board.count(new Piece(Color.BLACK, Type.PAWN)));
     }
     @Test
     void retrievePiece() {
         board.initialize();
         var blackRook = new chess.Location("a8");
         var whiteQueen = new chess.Location("e1");
-        assertEquals(new Piece(Color.Black, Type.Rook), board.getPieceBy(blackRook));
-        assertEquals(new Piece(Color.White, Type.King), board.getPieceBy(whiteQueen));
+        assertEquals(new Piece(Color.BLACK, Type.ROOK), board.getPieceBy(blackRook));
+        assertEquals(new Piece(Color.WHITE, Type.KING), board.getPieceBy(whiteQueen));
     }
 
     @Test
     void placePiece() {
         record PlacePieceCheck(Piece piece, Location location){};
-        var blackKing = new Piece(Color.Black, Type.King);
-        var blackRook = new Piece(Color.Black, Type.Rook);
-        var whiteKing = new Piece(Color.White, Type.King);
+        var blackKing = new Piece(Color.BLACK, Type.KING);
+        var blackRook = new Piece(Color.BLACK, Type.ROOK);
+        var whiteKing = new Piece(Color.WHITE, Type.KING);
         PlacePieceCheck[] checks = {
             new PlacePieceCheck(blackKing, new Location("b6")),
             new PlacePieceCheck(blackRook, new Location("b5")),
             new PlacePieceCheck(whiteKing, new Location("c4")),
         };
         int pieceCount = 0;
-        assertEquals(pieceCount, board.pieceCount());
+        assertEquals(pieceCount, board.countAllPieces());
         for (var check: checks) {
             board.placePiece(check.piece(), check.location());
             ++pieceCount;
-            assertEquals(pieceCount, board.pieceCount());
+            assertEquals(pieceCount, board.countAllPieces());
             assertEquals(check.piece(), board.getPieceBy(check.location()));
         }
 
@@ -174,16 +173,16 @@ public class BoardTest {
 
         final var blackPoints = 20.0;
         final var whitePoints = 19.5;
-        assertEquals(whitePoints, board.getStrength(Color.White));
-        assertEquals(blackPoints, board.getStrength(Color.Black));
+        assertEquals(whitePoints, board.getStrength(Color.WHITE));
+        assertEquals(blackPoints, board.getStrength(Color.BLACK));
 
         assertEquals(0.0, blackKing.strength());
         assertEquals(3.0,blackBishop.strength());
 
         // for getPieces
-        final var piecesWhite = board.getPieces(Color.White);
+        final var piecesWhite = board.getPieces(Color.WHITE);
         assertEquals(8, piecesWhite.size());
-        final var piecesBlack = board.getPieces(Color.Black);
+        final var piecesBlack = board.getPieces(Color.BLACK);
         assertEquals(7, piecesBlack.size());
 
         isSorted(piecesWhite);

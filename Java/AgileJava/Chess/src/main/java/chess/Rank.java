@@ -71,6 +71,12 @@ public class Rank {
         return count;
     }
 
+
+    /**
+     *
+     * @param column, count from 0.
+     * @return
+     */
     public void placePiece(Piece piece, int column) {
         pieces.set(column, piece);
     }

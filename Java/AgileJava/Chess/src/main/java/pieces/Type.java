@@ -4,22 +4,22 @@ import java.util.Map;
 import static pieces.Type.Representation.*;
 
 public enum Type {
-    King(KING),
-    Queen(QUEEN),
-    Rook(ROOK),
-    Bishop(BISHOP),
-    Pawn(PAWN),
-    Knight(KNIGHT),
-    NoPiece(NO_PIECE);
+    KING(R_KING),
+    QUEEN(R_QUEEN),
+    ROOK(R_ROOK),
+    BISHOP(R_BISHOP),
+    PAWN(R_PAWN),
+    KNIGHT(R_KNIGHT),
+    NO_PIECE(R_NO_PIECE);
 
     public static abstract class Representation {
-        public static final char KING = 'k';
-        public static final char QUEEN = 'q';
-        public static final char ROOK = 'r';
-        public static final char BISHOP = 'b';
-        public static final char KNIGHT = 'n';
-        public static final char PAWN = 'p';
-        public static final char NO_PIECE = '.';
+        public static final char R_KING = 'k';
+        public static final char R_QUEEN = 'q';
+        public static final char R_ROOK = 'r';
+        public static final char R_BISHOP = 'b';
+        public static final char R_KNIGHT = 'n';
+        public static final char R_PAWN = 'p';
+        public static final char R_NO_PIECE = '.';
     }
     private static Map<Type, Double> typeToPoint = null;
     private static Map<Character, Type> representationToType = null;
@@ -33,7 +33,7 @@ public enum Type {
         if(representationToType == null){
             initRepresentationToType();
         }
-        return representationToType.getOrDefault(lowerCase, NoPiece);
+        return representationToType.getOrDefault(lowerCase, NO_PIECE);
     }
     public char getRepresentation() {
         return representation;
@@ -47,21 +47,21 @@ public enum Type {
 
     private static void initializeTypeToPoint(){
         typeToPoint = Map.of(
-                Queen, 9.0,
-                Rook, 5.0,
-                Bishop, 3.0,
-                Knight, 2.5,
-                Pawn, 1.0
+                QUEEN, 9.0,
+                ROOK, 5.0,
+                BISHOP, 3.0,
+                KNIGHT, 2.5,
+                PAWN, 1.0
         );
     }
     private static void initRepresentationToType() {
         representationToType = Map.of(
-                KING, King,
-                QUEEN, Queen,
-                ROOK, Rook,
-                BISHOP, Bishop,
-                KNIGHT, Knight,
-                PAWN, Pawn
+                R_KING, KING,
+                R_QUEEN, QUEEN,
+                R_ROOK, ROOK,
+                R_BISHOP, BISHOP,
+                R_KNIGHT, KNIGHT,
+                R_PAWN, PAWN
         );
     }
 }

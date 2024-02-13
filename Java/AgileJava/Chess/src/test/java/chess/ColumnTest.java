@@ -14,11 +14,11 @@ class ColumnTest {
     void getPieces() {
         final var column = new Column("......P.");
         final EnumMap<Type, Integer> onePawn = new EnumMap<>(Map.of(
-               Type.Pawn, 1
+               Type.PAWN, 1
         ));
         final var emptyPieces = new EnumMap<Type, Integer>(Type.class) ;
-        assertEquals(onePawn, column.getTypeCount(Color.Black));
-        assertEquals(emptyPieces, column.getTypeCount(Color.White));
+        assertEquals(onePawn, column.getTypeCount(Color.BLACK));
+        assertEquals(emptyPieces, column.getTypeCount(Color.WHITE));
 
         final var blank = column.getPiece(0);
         assertEquals(".", blank.toString());
@@ -26,10 +26,10 @@ class ColumnTest {
         assertEquals("P", blackPawn.toString());
         assertEquals(0, blackPawn.strength());
 
-        assertEquals(1.0, column.getStrength(onePawn, Color.Black));
+        assertEquals(1.0, column.getStrength(onePawn, Color.BLACK));
         assertEquals(1.0, blackPawn.strength());
 
-        assertEquals(1.0, column.getStrength(Color.Black));
-        assertEquals(0.0, column.getStrength(Color.White));
+        assertEquals(1.0, column.getStrength(Color.BLACK));
+        assertEquals(0.0, column.getStrength(Color.WHITE));
     }
 }
