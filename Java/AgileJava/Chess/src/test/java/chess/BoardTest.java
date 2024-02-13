@@ -136,14 +136,15 @@ public class BoardTest {
         }
 
         final var boardRepresentation =
-            "........" + NEW_LINE +
-            "........" + NEW_LINE +
-            ".K......" + NEW_LINE +
-            ".R......" + NEW_LINE +
-            "..k....." + NEW_LINE +
-            "........" + NEW_LINE +
-            "........" + NEW_LINE +
-            "........" + NEW_LINE;
+            STR."""
+            ........\{NEW_LINE}\
+            ........\{NEW_LINE}\
+            .K......\{NEW_LINE}\
+            .R......\{NEW_LINE}\
+            ..k.....\{NEW_LINE}\
+            ........\{NEW_LINE}\
+            ........\{NEW_LINE}\
+            ........\{NEW_LINE}""";
         assertEquals(boardRepresentation, Printer.print(board));
     }
     @Test
