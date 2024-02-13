@@ -40,4 +40,82 @@ class StringUtilTest {
         var sentence = "测试中的";
         System.out.print(sentence.length());
     }
+
+    @Test
+    void isEqualIgnoreEOL() {
+        record Check(String left, String right, boolean expected) {
+        }
+        ;
+        Check[] checks = {
+            new Check(
+                """
+                .KR.....\r
+                P.PB....\r
+                .P..Q...\r
+                ........\r
+                .....nq.\r
+                .....p.p\r
+                .....pp.\r
+                ....rk..\r
+                """, """
+                .KR.....
+                P.PB....
+                .P..Q...
+                ........
+                .....nq.
+                .....p.p
+                .....pp.
+                ....rk..
+                """,
+                true
+            ),
+            new Check(
+                """
+                .KR.....
+                P.PB....
+                .P..Q...
+                ........
+                .....nq.
+                .....p.p
+                .....pp.
+                ....rk..
+                """, """
+                .KR.....
+                P.PB....
+                .P..Q...
+                ........
+                .....nq.
+                .....p.p
+                .....pp.
+                ....rk..
+                """,
+                true
+            ),
+            new Check(
+                """
+                .KR....P
+                P.PB....
+                .P..Q...
+                ........
+                .....nq.
+                .....p.p
+                .....pp.
+                ....rk..
+                """, """
+                .KR.....
+                P.PB....
+                .P..Q...
+                ........
+                .....nq.
+                .....p.p
+                .....pp.
+                ....rk..
+                """,
+                false
+            ),
+        };
+        for (var check : checks) {
+            assertEquals(check.expected, StringUtil.isEqualIgnoreEOL(check.left, check.right));
+        }
+    }
 }

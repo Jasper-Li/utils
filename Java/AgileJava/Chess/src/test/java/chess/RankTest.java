@@ -98,4 +98,11 @@ class RankTest {
         final var piecesWhite = rank.getPieces(Color.WHITE);
         assertEquals(1, piecesWhite.size());
     }
+
+    @Test
+    void toPrettyString() {
+        var representation = "pppppppp";
+        var prettyString = "p p p p p p p p ";
+        assertEquals(prettyString, new Rank(representation).toPrettyString());
+    }
 }

@@ -1,6 +1,5 @@
 package chess;
 
-import java.net.InetAddress;
 import java.util.Map;
 
 public enum ColumnIndex {
@@ -26,16 +25,19 @@ public enum ColumnIndex {
     }
     public ColumnIndex increment() {
         return switch(this){
-            case A -> B;
-            case B -> C;
-            case C -> D;
-            case D -> E;
-            case E -> F;
-            case F -> G;
-            case G -> H;
             case H, INVALID -> INVALID;
-            default -> INVALID;
+            default -> of((char)(representationLowerCase() + 1));
         };
+    }
+    public ColumnIndex decrement() {
+        return switch(this){
+            case A, INVALID -> INVALID;
+            default -> of((char)(representationLowerCase() - 1));
+        };
+    }
+    public Character representationLowerCase() {
+        char first = super.toString().charAt(0) ;
+        return Character.toLowerCase(first);
     }
 
     private static Map<Character, ColumnIndex> representationToObject = null;

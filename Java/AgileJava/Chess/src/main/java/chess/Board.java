@@ -125,4 +125,27 @@ public class Board {
         }
         return buffer.toString();
     }
+
+    public String toPrettyString() {
+        StringBuilder buffer = new StringBuilder();
+        for(var i = ranks.size() - 1; i >=0; --i) {
+            buffer.append(ranks.get(i).toPrettyString());
+            buffer.append(i+1);
+            buffer.append(StringUtil.NEW_LINE);
+        }
+        buffer.append("a b c d e f g h");
+        buffer.append(StringUtil.NEW_LINE);
+        return buffer.toString();
+    }
+    public void moveKing(Location start, Direction direction) {
+        var newLocation = start.moveKing(direction);
+        if(newLocation != start) {
+            var piece = getPieceBy(start);
+            placePiece(piece, newLocation);
+            placePiece(new Piece(), start);
+        }
+    }
+
+    //TODO: add equals
+
 }

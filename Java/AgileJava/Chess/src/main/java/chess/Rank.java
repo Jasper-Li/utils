@@ -9,6 +9,10 @@ import java.util.List;
 
 public class Rank {
     private List<Piece> pieces = new ArrayList<Piece>();
+
+    /**
+     * blank rank uses blank Piece.
+     */
     public Rank() {
         for(int i = 0; i < Board.COLUMN_COUNT; ++i) {
             pieces.add(new Piece());
@@ -52,6 +56,14 @@ public class Rank {
         StringBuilder buffer = new StringBuilder();
         for (var piece : pieces) {
             buffer.append(piece.toString());
+        }
+        return buffer.toString();
+    }
+    public String toPrettyString(){
+        StringBuilder buffer = new StringBuilder();
+        for (var piece : pieces) {
+            buffer.append(piece.toString());
+            buffer.append(" ");
         }
         return buffer.toString();
     }

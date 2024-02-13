@@ -5,12 +5,15 @@ import org.junit.jupiter.api.Test;
 import pieces.Color;
 import pieces.Piece;
 import pieces.Type;
+import util.StringUtil;
 
 import java.util.List;
 
 import static java.lang.System.out;
 import static org.junit.jupiter.api.Assertions.*;
 import static util.StringUtil.NEW_LINE;
+import static chess.ColumnIndex.*;
+import static chess.RankIndex.*;
 
 public class BoardTest {
     private static final String boardRepresentationTest_5_4 = util.System.isWindows() ?
@@ -64,7 +67,7 @@ public class BoardTest {
     }
     @Test
     void createByRepresentationWithDecoration() {
-        final var representation = """
+        final var representation = STR."""
                 . K R . . . . . 8
                 P . P B . . . . 7
                 . P . . Q . . . 6
@@ -99,6 +102,7 @@ public class BoardTest {
             """;
         board = new Board(representation);
         assertEquals(printExpected, Printer.print(board));
+        assertTrue(StringUtil.isEqualIgnoreEOL(representation, board.toPrettyString()));
     }
 
     @Test
@@ -203,4 +207,42 @@ public class BoardTest {
             );
         }
     }
+    @Test
+    void moveKing() {
+        record Check(String boardInit, String boardAfter, Direction direction, Location start, Location after){};
+        Check[] checks = {
+            new Check(
+       """
+                . . . . . . . . 8
+                . . . . . . . . 7
+                . . . . . . . . 6
+                . . . . . . . . 5
+                . . . . K . . . 4
+                . . . . . . . . 3
+                . . . . . . . . 2
+                . . . . . . . . 1
+                a b c d e f g h""",
+      """
+                . . . . . . . . 8
+                . . . . . . . . 7
+                . . . . . . . . 6
+                . . . . K . . . 5
+                . . . . . . . . 4
+                . . . . . . . . 3
+                . . . . . . . . 2
+                . . . . . . . . 1
+                a b c d e f g h""",
+                Direction.UP,
+                new Location(E, R4), new Location(E, R5)
+            ),
+                // TODO: add more conditions.
+        };
+        for (final var check : checks) {
+            var board = new Board(check.boardInit);
+            board.moveKing(check.start, check.direction);
+            assertEquals(new Board(check.boardAfter).toString(), board.toString());
+        }
+
+}
+
 }

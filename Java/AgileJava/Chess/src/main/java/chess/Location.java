@@ -18,4 +18,20 @@ public record Location(ColumnIndex column, RankIndex rank) {
     public boolean isValid() {
         return column != ColumnIndex.INVALID && rank != RankIndex.INVALID;
     }
+
+
+    Location moveKing(Direction direction){
+        Location next = switch(direction){
+            case UP -> new Location(column, rank.increment());
+            case DOWN -> new Location(column, rank.decrement());
+            case LEFT -> new Location(column.decrement(), rank);
+            case RIGHT -> new Location(column.increment(), rank);
+            case UP_LEFT, LEFT_UP -> new Location(column.decrement(), rank.increment());
+            case UP_RIGHT, RIGHT_UP -> new Location(column.increment(), rank.increment());
+            case DOWN_LEFT, LEFT_DOWN -> new Location(column.decrement(), rank.decrement());
+            case DOWN_RIGHT, RIGHT_DOWN -> new Location(column.increment(), rank.decrement());
+            default -> this;
+        };
+        return next.isValid() ? next : this;
+    }
 }

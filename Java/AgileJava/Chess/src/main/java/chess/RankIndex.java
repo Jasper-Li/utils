@@ -30,6 +30,13 @@ public enum RankIndex {
         var representation =(char)(representation() + 1);
         return RankIndex.of(representation);
     }
+    public RankIndex decrement() {
+        if(internalIndex == 0 || internalIndex == -1){
+            return INVALID;
+        }
+        var representation =(char)(representation() - 1);
+        return RankIndex.of(representation);
+    }
 
     Character representation() {
         return switch (this) {

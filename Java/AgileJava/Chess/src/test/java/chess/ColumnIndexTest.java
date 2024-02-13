@@ -31,4 +31,22 @@ class ColumnIndexTest {
             assertEquals(check.after, check.start.increment());
         }
     }
+    @Test
+    void decrement() {
+        record Check(ColumnIndex start, ColumnIndex after) {};
+        Check[] checks = {
+                new Check(A, INVALID),
+                new Check(B, A),
+                new Check(C, B),
+                new Check(D, C),
+                new Check(E, D),
+                new Check(F, E),
+                new Check(G, F),
+                new Check(H, G),
+                new Check(INVALID, INVALID),
+        };
+        for(final var check : checks) {
+            assertEquals(check.after, check.start.decrement());
+        }
+    }
 }
