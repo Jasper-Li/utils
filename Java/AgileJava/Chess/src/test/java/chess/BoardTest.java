@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static util.StringUtil.NEW_LINE;
 import static chess.ColumnIndex.*;
 import static chess.RankIndex.*;
+import static chess.Direction.*;
 
 public class BoardTest {
     private static final String boardRepresentationTest_5_4 = util.System.isWindows() ?
@@ -209,40 +210,319 @@ public class BoardTest {
     }
     @Test
     void moveKing() {
-        record Check(String boardInit, String boardAfter, Direction direction, Location start, Location after){};
-        Check[] checks = {
-            new Check(
-       """
-                . . . . . . . . 8
-                . . . . . . . . 7
-                . . . . . . . . 6
-                . . . . . . . . 5
-                . . . . K . . . 4
-                . . . . . . . . 3
-                . . . . . . . . 2
-                . . . . . . . . 1
-                a b c d e f g h""",
-      """
-                . . . . . . . . 8
-                . . . . . . . . 7
-                . . . . . . . . 6
-                . . . . K . . . 5
-                . . . . . . . . 4
-                . . . . . . . . 3
-                . . . . . . . . 2
-                . . . . . . . . 1
-                a b c d e f g h""",
-                Direction.UP,
-                new Location(E, R4), new Location(E, R5)
-            ),
-                // TODO: add more conditions.
+        record CheckNextPosition(String boardAfter, List<Direction> directions){};
+        record CheckMoving(String boardStart, Location fromHere, CheckNextPosition[] nextPositions){};
+
+        CheckMoving[] checkMovings = {
+            new CheckMoving(
+                """
+                 . . . . . . . . 8
+                 . . . . . . . . 7
+                 . . . . . . . . 6
+                 . . . . . . . . 5
+                 . . . . K . . . 4
+                 . . . . . . . . 3
+                 . . . . . . . . 2
+                 . . . . . . . . 1
+                 a b c d e f g h""", new Location(E, R4),
+                new CheckNextPosition[]{
+                    new CheckNextPosition(
+                        """
+                         . . . . . . . . 8
+                         . . . . . . . . 7
+                         . . . . . . . . 6
+                         . . . . K . . . 5
+                         . . . . . . . . 4
+                         . . . . . . . . 3
+                         . . . . . . . . 2
+                         . . . . . . . . 1
+                         a b c d e f g h""",
+                        List.of(UP)),
+                    new CheckNextPosition(
+                        """
+                        . . . . . . . . 8
+                        . . . . . . . . 7
+                        . . . . . . . . 6
+                        . . . . . . . . 5
+                        . . . . . . . . 4
+                        . . . . K . . . 3
+                        . . . . . . . . 2
+                        . . . . . . . . 1
+                        a b c d e f g h""",
+                        List.of(DOWN)),
+                    new CheckNextPosition(
+                        """
+                        . . . . . . . . 8
+                        . . . . . . . . 7
+                        . . . . . . . . 6
+                        . . . . . . . . 5
+                        . . . K . . . . 4
+                        . . . . . . . . 3
+                        . . . . . . . . 2
+                        . . . . . . . . 1
+                        a b c d e f g h""",
+                        List.of(LEFT)),
+                    new CheckNextPosition(
+                        """
+                        . . . . . . . . 8
+                        . . . . . . . . 7
+                        . . . . . . . . 6
+                        . . . . . . . . 5
+                        . . . . . K . . 4
+                        . . . . . . . . 3
+                        . . . . . . . . 2
+                        . . . . . . . . 1
+                        a b c d e f g h""",
+                        List.of(RIGHT)),
+                    new CheckNextPosition(
+                        """
+                         . . . . . . . . 8
+                         . . . . . . . . 7
+                         . . . . . . . . 6
+                         . . . K . . . . 5
+                         . . . . . . . . 4
+                         . . . . . . . . 3
+                         . . . . . . . . 2
+                         . . . . . . . . 1
+                         a b c d e f g h""",
+                        List.of(UP_LEFT, LEFT_UP)),
+                    new CheckNextPosition(
+                        """
+                        . . . . . . . . 8
+                        . . . . . . . . 7
+                        . . . . . . . . 6
+                        . . . . . K . . 5
+                        . . . . . . . . 4
+                        . . . . . . . . 3
+                        . . . . . . . . 2
+                        . . . . . . . . 1
+                        a b c d e f g h""",
+                        List.of(UP_RIGHT, RIGHT_UP)),
+                    new CheckNextPosition(
+                        """
+                        . . . . . . . . 8
+                        . . . . . . . . 7
+                        . . . . . . . . 6
+                        . . . . . . . . 5
+                        . . . . . . . . 4
+                        . . . K . . . . 3
+                        . . . . . . . . 2
+                        . . . . . . . . 1
+                        a b c d e f g h""",
+                        List.of(DOWN_LEFT, LEFT_DOWN)),
+                    new CheckNextPosition(
+                        """
+                        . . . . . . . . 8
+                        . . . . . . . . 7
+                        . . . . . . . . 6
+                        . . . . . . . . 5
+                        . . . . . . . . 4
+                        . . . . . K . . 3
+                        . . . . . . . . 2
+                        . . . . . . . . 1
+                        a b c d e f g h""",
+                        List.of(DOWN_RIGHT, RIGHT_DOWN)),
+                }// end nextPositions
+            ), // end CheckMoving
+            new CheckMoving(
+                """
+                 K . . . . . . . 8
+                 . . . . . . . . 7
+                 . . . . . . . . 6
+                 . . . . . . . . 5
+                 . . . . . . . . 4
+                 . . . . . . . . 3
+                 . . . . . . . . 2
+                 . . . . . . . . 1
+                 a b c d e f g h""", new Location(A, R8),
+                new CheckNextPosition[]{
+                    new CheckNextPosition(
+                        """
+                         K . . . . . . . 8
+                         . . . . . . . . 7
+                         . . . . . . . . 6
+                         . . . . . . . . 5
+                         . . . . . . . . 4
+                         . . . . . . . . 3
+                         . . . . . . . . 2
+                         . . . . . . . . 1
+                         a b c d e f g h""",
+                        List.of(UP_LEFT, LEFT_UP, UP, UP_RIGHT, RIGHT_UP,LEFT, LEFT_DOWN, DOWN_LEFT)),
+                    new CheckNextPosition(
+                        """
+                         . K . . . . . . 8
+                         . . . . . . . . 7
+                         . . . . . . . . 6
+                         . . . . . . . . 5
+                         . . . . . . . . 4
+                         . . . . . . . . 3
+                         . . . . . . . . 2
+                         . . . . . . . . 1
+                         a b c d e f g h""",
+                        List.of(RIGHT)),
+                    new CheckNextPosition(
+                        """
+                         . . . . . . . . 8
+                         . K . . . . . . 7
+                         . . . . . . . . 6
+                         . . . . . . . . 5
+                         . . . . . . . . 4
+                         . . . . . . . . 3
+                         . . . . . . . . 2
+                         . . . . . . . . 1
+                         a b c d e f g h""",
+                        List.of(RIGHT_DOWN, DOWN_RIGHT)),
+                    new CheckNextPosition(
+                        """
+                         . . . . . . . . 8
+                         K . . . . . . . 7
+                         . . . . . . . . 6
+                         . . . . . . . . 5
+                         . . . . . . . . 4
+                         . . . . . . . . 3
+                         . . . . . . . . 2
+                         . . . . . . . . 1
+                         a b c d e f g h""",
+                        List.of(DOWN)),
+                }// end nextPositions
+            ), // end CheckMoving
+            new CheckMoving(
+                """
+                 . . . . . . . . 8
+                 . . . . . . . . 7
+                 . . . . . . . . 6
+                 . . . . . . . . 5
+                 . . . . . . . . 4
+                 . . . . . . . . 3
+                 . . . . . . . . 2
+                 . . . . . . . K 1
+                 a b c d e f g h""", new Location(H, R1),
+                new CheckNextPosition[]{
+                    new CheckNextPosition(
+                        """
+                         . . . . . . . . 8
+                         . . . . . . . . 7
+                         . . . . . . . . 6
+                         . . . . . . . . 5
+                         . . . . . . . . 4
+                         . . . . . . . . 3
+                         . . . . . . . . 2
+                         . . . . . . . K 1
+                         a b c d e f g h""",
+                        List.of(UP_RIGHT, RIGHT_UP, RIGHT, RIGHT_DOWN, DOWN_RIGHT, DOWN, DOWN_LEFT, LEFT_DOWN)),
+                    new CheckNextPosition(
+                        """
+                         . . . . . . . . 8
+                         . . . . . . . . 7
+                         . . . . . . . . 6
+                         . . . . . . . . 5
+                         . . . . . . . . 4
+                         . . . . . . . . 3
+                         . . . . . . . K 2
+                         . . . . . . . . 1
+                         a b c d e f g h""",
+                        List.of(UP)),
+                    new CheckNextPosition(
+                        """
+                         . . . . . . . . 8
+                         . . . . . . . . 7
+                         . . . . . . . . 6
+                         . . . . . . . . 5
+                         . . . . . . . . 4
+                         . . . . . . . . 3
+                         . . . . . . K . 2
+                         . . . . . . . . 1
+                         a b c d e f g h""",
+                        List.of(UP_LEFT, LEFT_UP)),
+                    new CheckNextPosition(
+                        """
+                         . . . . . . . . 8
+                         . . . . . . . . 7
+                         . . . . . . . . 6
+                         . . . . . . . . 5
+                         . . . . . . . . 4
+                         . . . . . . . . 3
+                         . . . . . . . . 2
+                         . . . . . . K . 1
+                         a b c d e f g h""",
+                        List.of(LEFT)),
+                }// end nextPositions
+            ), // end CheckMoving
         };
-        for (final var check : checks) {
-            var board = new Board(check.boardInit);
-            board.moveKing(check.start, check.direction);
-            assertEquals(new Board(check.boardAfter).toString(), board.toString());
+        for (final var checkMoving : checkMovings) {
+            for(final var nextPosition : checkMoving.nextPositions) {
+                for (final var direction : nextPosition.directions) {
+                    var board = new Board(checkMoving.boardStart);
+                    board.moveKing(checkMoving.fromHere, direction);
+                    assertEquals(new Board(nextPosition.boardAfter), board, STR."Failed on testing direction \{direction} from \{checkMoving.fromHere} of board:\n\{checkMoving.boardStart}" );
+                }
+            }
         }
 
 }
 
+    @Test
+    void testEquals() {
+        record Check(String boardA, String boardB, boolean expected){}
+        Check[] checks = {
+            new Check(
+                """
+                    . K R . . . . . 8
+                    P . P B . . . . 7
+                    . P . . Q . . . 6
+                    . . . . . . . . 5
+                    . . . . . n q . 4
+                    . . . . . p . p 3
+                    . . . . . p p . 2
+                    . . . . r k . . 1
+                    a b c d e f g h
+                    """, """
+                    . K R . . . . . 8
+                    P . P B . . . . 7
+                    . P . . Q . . . 6
+                    . . . . . . . . 5
+                    . . . . . n q . 4
+                    . . . . . p . p 3
+                    . . . . . p p . 2
+                    . . . . r k . . 1
+                    a b c d e f g h
+                    """, true
+            ),
+            new Check(
+                """
+                    . K R . . . . . 8
+                    P . P B . . . . 7
+                    . P . . Q . . . 6
+                    . . . . . . . . 5
+                    . . . . . n q . 4
+                    . . . . . p . p 3
+                    . . . . . p p . 2
+                    . . . . r k . . 1
+                    a b c d e f g h
+                    """, """
+                    . K R . . . . . 8
+                    P . P B . . . . 7
+                    . P . . Q . . . 6
+                    . . . . . . . . 5
+                    . . . . . n q . 4
+                    . . . . . p . p 3
+                    . . . . . p p . 2
+                    . . . . r k . P 1
+                    a b c d e f g h
+                    """, false
+            ),
+        };
+        for(final var check: checks) {
+            var boardA = new Board(check.boardA);
+            var boardB = new Board(check.boardB);
+            assertEquals(check.expected, boardA.equals(boardB));
+            assertEquals(check.expected, boardB.equals(boardA));
+            if(check.expected){
+                assertEquals(boardA, boardB);
+            } else {
+                assertNotEquals(boardA, boardB);
+            }
+        }
+
+    }
 }

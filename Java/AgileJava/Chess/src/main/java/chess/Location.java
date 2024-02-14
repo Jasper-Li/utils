@@ -34,4 +34,13 @@ public record Location(ColumnIndex column, RankIndex rank) {
         };
         return next.isValid() ? next : this;
     }
+
+    @Override
+    public String toString() {
+        final var columnValid = column.isValid();
+        final var rankValid = rank.isValid();
+        final String columnPart = columnValid ? column.representationLowerCase().toString() : "Invalid";
+        final String rankPart = rankValid ? rank.representation().toString() : "Invalid";
+        return columnValid && rankValid ? STR."\{columnPart}\{rankPart}" : STR."[\{columnPart}, \{rankPart}]";
+    }
 }

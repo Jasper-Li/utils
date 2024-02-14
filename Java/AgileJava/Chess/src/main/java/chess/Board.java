@@ -146,6 +146,12 @@ public class Board {
         }
     }
 
-    //TODO: add equals
+    @Override
+    public boolean equals(Object that){
+        if(that instanceof Board t) {
+            return this.ranks.equals(t.ranks);
+        }
+        return false;
+    }
 
 }

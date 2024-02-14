@@ -105,4 +105,18 @@ class RankTest {
         var prettyString = "p p p p p p p p ";
         assertEquals(prettyString, new Rank(representation).toPrettyString());
     }
+
+    @Test
+    void testEquals() {
+        record Check(String rankA, String rankB, boolean status) {};
+        Check[] checks= {
+            new Check("........", "........", true),
+            new Check(".......p", ".......p", true),
+            new Check(".......p", ".......P", false),
+        };
+        for(var check : checks){
+            assertEquals(check.status, check.rankA.equals(check.rankB));
+            assertEquals(check.status, check.rankB.equals(check.rankA));
+        }
+    }
 }

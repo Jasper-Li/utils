@@ -3,14 +3,13 @@ package chess;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import chess.Location;
 import static chess.RankIndex.*;
 import static chess.ColumnIndex.*;
 
 class LocationTest {
     @Test
     void create() {
-        record LocationCheck(String repr, ColumnIndex column, RankIndex rank){}
+        record LocationCheck(String representation, ColumnIndex column, RankIndex rank){}
         final LocationCheck[] checks = {
             new LocationCheck("a8", A, R8),
             new LocationCheck("a1", A, R1),
@@ -21,7 +20,8 @@ class LocationTest {
             final var locationExpect = new Location(check.column, check.rank);
             assertEquals(check.column, locationExpect.column());
             assertEquals(check.rank, locationExpect.rank());
-            assertEquals(locationExpect, new Location(check.repr));
+            assertEquals(locationExpect, new Location(check.representation));
+            assertEquals(check.representation, locationExpect.toString());
         }
     }
 
